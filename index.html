@@ -263,6 +263,15 @@
     section {
       padding: 4rem 0;
     }
+    /* Sticky nav offset for in-page anchors */
+    #download,
+    #powers,
+    #how,
+    #gallery,
+    #faq,
+    #privacy {
+      scroll-margin-top: calc(var(--nav-h) + 12px);
+    }
     .section-head { margin-bottom: 0.25rem; }
 
     /* —— Hero —— */
@@ -792,7 +801,7 @@
             Live market data when you plug in <em>your</em> PriceCharting key — it stays on your device.
           </p>
 
-          <div class="btn-row" id="download">
+          <div class="btn-row">
             <!-- TODO: replace href with real App Store URL -->
             <a class="btn is-soon" href="#" aria-disabled="true" data-store="apple" title="App Store link coming soon">
                App Store
@@ -987,7 +996,7 @@
     </div>
 
     <!-- CTA -->
-    <section class="cta-band" aria-labelledby="cta-title">
+    <section class="cta-band" id="download" aria-labelledby="cta-title">
       <div class="wrap">
         <div class="cta-panel">
           <h2 id="cta-title">Download Comic Coin</h2>
