@@ -717,10 +717,34 @@
       font-weight: 700;
     }
     .footer-links a:hover { color: var(--gold); }
-    .footer-copy {
+    .footer-credit {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
       margin-top: 1.75rem;
+      font-weight: 800;
+      font-size: 0.95rem;
+      color: #eee;
+    }
+    .footer-credit a {
+      color: var(--gold);
+      text-decoration: none;
+    }
+    .footer-credit a:hover { color: #fff; text-decoration: underline; }
+    .footer-credit .film-reel {
+      flex-shrink: 0;
+      width: 1.25rem;
+      height: 1.25rem;
+      color: var(--gold);
+    }
+    .footer-copy {
+      margin-top: 0.65rem;
       font-size: 0.85rem;
       opacity: 0.75;
+    }
+    .footer-copy a {
+      color: inherit;
+      text-decoration: underline;
     }
 
     /* Reduced motion */
@@ -1103,7 +1127,22 @@
           <li><a href="#" data-store="google" aria-disabled="true">Google Play</a></li>
         </ul>
       </div>
-      <p class="footer-copy">© <span id="year">2026</span> Comic Coin. Comic prices. Comic style. Not affiliated with PriceCharting. A <a href="https://www.featurerich.io" rel="noopener noreferrer">Feature Rich</a> Production</p>
+      <p class="footer-credit">
+        <svg class="film-reel" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false">
+          <circle cx="12" cy="12" r="9.5" fill="none" stroke="currentColor" stroke-width="1.75"/>
+          <circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.75"/>
+          <circle cx="12" cy="5.5" r="1.15" fill="currentColor"/>
+          <circle cx="12" cy="18.5" r="1.15" fill="currentColor"/>
+          <circle cx="5.5" cy="12" r="1.15" fill="currentColor"/>
+          <circle cx="18.5" cy="12" r="1.15" fill="currentColor"/>
+          <circle cx="7.4" cy="7.4" r="1.05" fill="currentColor"/>
+          <circle cx="16.6" cy="7.4" r="1.05" fill="currentColor"/>
+          <circle cx="7.4" cy="16.6" r="1.05" fill="currentColor"/>
+          <circle cx="16.6" cy="16.6" r="1.05" fill="currentColor"/>
+        </svg>
+        <span>A <a href="https://www.featurerich.io" rel="noopener noreferrer">Feature Rich</a> Production</span>
+      </p>
+      <p class="footer-copy">© <span id="year">2026</span> Comic Coin. Comic prices. Comic style. Not affiliated with PriceCharting.</p>
     </div>
   </footer>
 
