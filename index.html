@@ -239,9 +239,9 @@
       outline: 2px solid var(--gold);
       outline-offset: 2px;
     }
-    .boom-btn svg {
-      width: 24px;
-      height: 24px;
+    .boom-btn .boom-emoji {
+      font-size: 1.25rem;
+      line-height: 1;
       display: block;
     }
     .boom-panel {
@@ -627,6 +627,13 @@
       font-size: 1.35rem;
       margin-bottom: 0.75rem;
       background: var(--gold);
+      color: var(--ink);
+    }
+    .power-icon svg {
+      width: 1.15em;
+      height: 1.15em;
+      display: block;
+      fill: currentColor;
     }
     .power-card:nth-child(2) .power-icon { background: #ffb4a8; }
     .power-card:nth-child(3) .power-icon { background: #b8d4ff; }
@@ -931,12 +938,7 @@
 
         <div class="boom-menu" id="boom-menu">
           <button type="button" class="boom-btn" id="boom-btn" aria-expanded="false" aria-controls="boom-panel" aria-label="Open preview controls">
-            <!-- Comic explosion / boom icon (instead of hamburger) -->
-            <svg viewBox="0 0 24 24" fill="currentColor" focusable="false" aria-hidden="true">
-              <path d="M12 2l1.1 3.9 2.7-2.1-.2 4 3.8-1.3-1.6 3.6 4 .4-3.2 2.5 3.2 2.5-4 .4 1.6 3.6-3.8-1.3.2 4-2.7-2.1L12 22l-1.1-3.9-2.7 2.1.2-4-3.8 1.3 1.6-3.6-4-.4 3.2-2.5L1.6 9.5l4-.4L4 5.5l3.8 1.3-.2-4 2.7 2.1L12 2z"/>
-              <circle cx="12" cy="12" r="3.6" fill="#0b0b0f"/>
-              <circle cx="12" cy="12" r="1.7" fill="currentColor"/>
-            </svg>
+            <span class="boom-emoji" aria-hidden="true">&#x1F4A5;</span>
           </button>
           <div class="boom-panel" id="boom-panel" role="region" aria-label="Preview controls">
             <p class="boom-panel-label">Preview</p>
@@ -1069,12 +1071,16 @@
             <p>Swipe to browse recent searches. Retry, reload into the form, or delete what you don’t need.</p>
           </article>
           <article class="panel power-card">
-            <div class="power-icon" aria-hidden="true">⚡</div>
+            <div class="power-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" focusable="false"><path d="M13 2L4.5 13.5H11l-1 8.5L19.5 10.5H13L13 2z"/></svg>
+            </div>
             <h3>AI or BYOK</h3>
             <p>Jump in with AI estimates. Want live PriceCharting data? Bring your own key — never bundled, always optional.</p>
           </article>
           <article class="panel power-card">
-            <div class="power-icon" aria-hidden="true">🔒</div>
+            <div class="power-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" focusable="false"><path d="M17 9V7a5 5 0 0 0-10 0v2H5v12h14V9h-2zm-8-2a3 3 0 0 1 6 0v2H9V7zm3 7.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/></svg>
+            </div>
             <h3>Private by design</h3>
             <p>Your API key and search history stay on your device. We don’t scoop your list or sell your data.</p>
           </article>
