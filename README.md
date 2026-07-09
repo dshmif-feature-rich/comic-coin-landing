@@ -12,8 +12,8 @@ Designed for **GitHub Pages**: no build step. Single-page layout plus a public p
 | `privacy.html` | Public privacy policy (store URL target) |
 | `assets/icon.png` | App icon |
 | `assets/hero-bg.webp` | Golden Age hero backdrop |
-| `assets/screens/ios/` | iOS screenshots (search, results, history) |
-| `assets/screens/android/` | Android shots (SVG placeholders until real PNGs land) |
+| `assets/screens/ios/light/` · `…/dark/` | iOS screenshots (search, results, history) |
+| `assets/screens/android/light/` · `…/dark/` | Android shots (SVG placeholders until real PNGs land) |
 
 ## Local preview
 
@@ -47,25 +47,24 @@ Remove `aria-disabled="true"`, `is-soon`, and “Coming soon” labels when live
 
 ### Screenshots
 
-**iOS** (already copied from `comics-flutter`):
+**iOS** (light + dark, from `comics-flutter`):
 
-- `assets/screens/ios/search.png`
-- `assets/screens/ios/results.png`
-- `assets/screens/ios/history.png`
+- `assets/screens/ios/light/{search,results,history}.png`
+- `assets/screens/ios/dark/{search,results,history}.png`
 
-**Android** — replace placeholders with real captures (same three screens, matching order):
+**Android** — replace placeholders with real captures (same three screens × light/dark):
 
-- `assets/screens/android/search.png` (or keep `.svg` names and update `data-android-src` in HTML)
-- `assets/screens/android/results.png`
-- `assets/screens/android/history.png`
+- `assets/screens/android/light/{search,results,history}.svg` (placeholders)
+- `assets/screens/android/dark/{search,results,history}.svg` (placeholders)
 
-If you use `.png`, update every `data-android-src` in `index.html` from `.svg` to `.png`.
+If you use `.png`, update every `data-android-light` / `data-android-dark` path in `index.html`.
 
-### Platform toggle
+### Preview toggles
 
-- Defaults to **iOS**
-- Switch in the sticky nav swaps all `[data-screen]` images
-- Choice is stored in `localStorage` under `comic-coin-platform`
+- **Platform:** defaults to **iOS** (`localStorage`: `comic-coin-platform`)
+- **Theme:** defaults to **Light**, or system dark if preferred (`localStorage`: `comic-coin-theme`)
+- Both nav switches combine: all `[data-screen]` images use `data-{ios|android}-{light|dark}`
+- Page chrome also follows light/dark so screenshots match the surrounding UI
 
 ### Copy notes
 

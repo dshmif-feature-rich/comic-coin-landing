@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en" data-platform="ios">
+<html lang="en" data-platform="ios" data-theme="light">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Comic Coin — Comic prices. Comic style.</title>
   <meta name="description" content="Track comic book prices with style using the power of AI or the PriceCharting API. Jump in with AI estimates — PriceCharting is BYOK." />
-  <meta name="theme-color" content="#0b0b0f" />
+  <meta name="theme-color" content="#f6f0e4" id="meta-theme-color" />
   <link rel="icon" href="assets/icon.png" type="image/png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -23,11 +23,32 @@
       --muted: #4a463c;
       --panel: #fffdf8;
       --shadow: 6px 6px 0 var(--ink);
+      --dot: rgba(11,11,15,0.08);
+      --hero-scrim: linear-gradient(110deg, rgba(246,240,228,0.96) 0%, rgba(246,240,228,0.88) 42%, rgba(246,240,228,0.55) 100%);
+      --how-bg: rgba(255,255,255,0.35);
+      --chip-ai: #e8f0ff;
+      --chip-byok: #fff4cc;
       --radius: 14px;
       --nav-h: 64px;
       --max: 1120px;
       --font-display: "Bangers", "Impact", "Arial Black", system-ui, sans-serif;
       --font-body: "Nunito", system-ui, -apple-system, sans-serif;
+    }
+
+    html[data-theme="dark"] {
+      --ink: #f2efe6;
+      --paper: #121218;
+      --paper-2: #0b0b10;
+      --muted: #b8b0a0;
+      --panel: #1c1c26;
+      --shadow: 6px 6px 0 #000;
+      --dot: rgba(255,215,0,0.08);
+      --hero-scrim: linear-gradient(110deg, rgba(18,18,24,0.94) 0%, rgba(18,18,24,0.88) 42%, rgba(18,18,24,0.62) 100%);
+      --how-bg: rgba(0,0,0,0.28);
+      --chip-ai: #1a2740;
+      --chip-byok: #3a3010;
+      --blue: #6ea8ff;
+      --blue-bright: #93c5fd;
     }
 
     *, *::before, *::after { box-sizing: border-box; }
@@ -37,9 +58,10 @@
       font-family: var(--font-body);
       color: var(--ink);
       background:
-        radial-gradient(circle at 1px 1px, rgba(11,11,15,0.08) 1px, transparent 0) 0 0 / 14px 14px,
+        radial-gradient(circle at 1px 1px, var(--dot) 1px, transparent 0) 0 0 / 14px 14px,
         linear-gradient(180deg, var(--paper) 0%, var(--paper-2) 100%);
       line-height: 1.55;
+      transition: background 0.2s, color 0.2s;
     }
     img { max-width: 100%; display: block; }
     a { color: var(--blue); }
@@ -108,7 +130,9 @@
     .nav-actions {
       display: flex;
       align-items: center;
-      gap: 0.65rem;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 0.45rem;
     }
     .nav-cta {
       display: none;
@@ -123,26 +147,27 @@
     }
     .nav-cta:hover { background: #fff; color: var(--ink); }
 
-    /* Platform toggle */
-    .platform-toggle {
+    /* Preview toggles (platform + theme) */
+    .preview-toggle {
       display: inline-flex;
       align-items: center;
-      gap: 0.4rem;
+      gap: 0.35rem;
       background: #1c1c24;
       border: 2px solid #3a3a48;
       border-radius: 999px;
-      padding: 0.25rem 0.55rem 0.25rem 0.65rem;
+      padding: 0.22rem 0.5rem 0.22rem 0.55rem;
       color: #ddd;
-      font-size: 0.78rem;
+      font-size: 0.72rem;
       font-weight: 800;
       user-select: none;
     }
-    .platform-toggle label { cursor: pointer; }
+    .preview-toggle label { cursor: pointer; }
     .switch {
       position: relative;
-      width: 44px;
-      height: 24px;
+      width: 40px;
+      height: 22px;
       display: inline-block;
+      flex-shrink: 0;
     }
     .switch input {
       opacity: 0;
@@ -162,21 +187,24 @@
     .slider::before {
       content: "";
       position: absolute;
-      width: 16px;
-      height: 16px;
+      width: 14px;
+      height: 14px;
       left: 2px;
-      top: 2px;
+      top: 1px;
       background: #fff;
       border-radius: 50%;
       transition: transform 0.2s;
       box-shadow: 0 1px 3px rgba(0,0,0,0.35);
     }
-    .switch input:checked + .slider { background: #3ddc84; }
-    .switch input:checked + .slider::before { transform: translateX(20px); }
+    .switch input:checked + .slider.platform-slider { background: #3ddc84; }
+    .switch input:checked + .slider.theme-slider { background: #7c5cff; }
+    .switch input:checked + .slider::before { transform: translateX(18px); }
     .switch input:focus-visible + .slider { outline: 2px solid var(--gold); outline-offset: 2px; }
-    .toggle-ios, .toggle-android { opacity: 0.55; transition: opacity 0.15s; }
+    .toggle-side { opacity: 0.55; transition: opacity 0.15s; }
     html[data-platform="ios"] .toggle-ios,
-    html[data-platform="android"] .toggle-android { opacity: 1; color: #fff; }
+    html[data-platform="android"] .toggle-android,
+    html[data-theme="light"] .toggle-light,
+    html[data-theme="dark"] .toggle-dark { opacity: 1; color: #fff; }
 
     /* —— Buttons —— */
     .btn {
@@ -269,7 +297,7 @@
       position: absolute;
       inset: 0;
       background:
-        linear-gradient(110deg, rgba(246,240,228,0.96) 0%, rgba(246,240,228,0.88) 42%, rgba(246,240,228,0.55) 100%),
+        var(--hero-scrim),
         url("assets/hero-bg.webp") center / cover no-repeat;
       z-index: 0;
       filter: saturate(1.05);
@@ -377,8 +405,8 @@
       font-size: 0.88rem;
       box-shadow: 3px 3px 0 var(--ink);
     }
-    .path-chip.ai { background: #e8f0ff; }
-    .path-chip.byok { background: #fff4cc; }
+    .path-chip.ai { background: var(--chip-ai); }
+    .path-chip.byok { background: var(--chip-byok); }
     .stamp {
       display: inline-block;
       font-family: var(--font-display);
@@ -710,7 +738,7 @@
     /* Reduced motion */
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
-      .btn, .power-card, .slider, .slider::before, .toggle-ios, .toggle-android {
+      .btn, .power-card, .slider, .slider::before, .toggle-side, body {
         transition: none !important;
       }
       .pow-wrap { transform: none; }
@@ -735,14 +763,21 @@
         </ul>
       </nav>
       <div class="nav-actions">
-        <div class="platform-toggle" title="Switch app screenshots between iOS and Android">
-          <span class="toggle-ios" id="label-ios">iOS</span>
+        <div class="preview-toggle" title="Switch app screenshots between iOS and Android">
+          <span class="toggle-side toggle-ios">iOS</span>
           <label class="switch">
-            <span class="visually-hidden" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0;">Show Android screenshots</span>
-            <input type="checkbox" id="platform-switch" role="switch" aria-checked="false" aria-label="Toggle Android screenshots" />
-            <span class="slider" aria-hidden="true"></span>
+            <input type="checkbox" id="platform-switch" role="switch" aria-checked="false" aria-label="Show Android screenshots" />
+            <span class="slider platform-slider" aria-hidden="true"></span>
           </label>
-          <span class="toggle-android" id="label-android">Android</span>
+          <span class="toggle-side toggle-android">Android</span>
+        </div>
+        <div class="preview-toggle" title="Switch light and dark app screenshots">
+          <span class="toggle-side toggle-light">Light</span>
+          <label class="switch">
+            <input type="checkbox" id="theme-switch" role="switch" aria-checked="false" aria-label="Show dark mode screenshots" />
+            <span class="slider theme-slider" aria-hidden="true"></span>
+          </label>
+          <span class="toggle-side toggle-dark">Dark</span>
         </div>
         <a class="nav-cta" href="#download">Get the app</a>
       </div>
@@ -799,16 +834,18 @@
               <img
                 id="hero-screen"
                 data-screen
-                data-ios-src="assets/screens/ios/search.png"
-                data-android-src="assets/screens/android/search.svg"
-                src="assets/screens/ios/search.png"
-                alt="Comic Coin search screen on iOS"
+                data-ios-light="assets/screens/ios/light/search.png"
+                data-ios-dark="assets/screens/ios/dark/search.png"
+                data-android-light="assets/screens/android/light/search.svg"
+                data-android-dark="assets/screens/android/dark/search.svg"
+                src="assets/screens/ios/light/search.png"
+                alt="Comic Coin search screen on iOS (light mode)"
                 width="390"
                 height="844"
               />
             </div>
           </div>
-          <p class="phone-caption"><span data-platform-label>iOS</span> preview</p>
+          <p class="phone-caption"><span data-platform-label>iOS</span> · <span data-theme-label>Light</span> preview</p>
           <p class="android-note">Android screenshots coming soon — placeholder shown.</p>
         </div>
       </div>
@@ -858,7 +895,7 @@
     </section>
 
     <!-- How it works -->
-    <section id="how" aria-labelledby="how-title" style="background: rgba(255,255,255,0.35);">
+    <section id="how" aria-labelledby="how-title" style="background: var(--how-bg);">
       <div class="wrap">
         <div class="section-head">
           <span class="section-kicker">Origin story</span>
@@ -892,7 +929,7 @@
           <span class="section-kicker">Evidence locker</span>
           <h2 id="gallery-title" class="section-title">Inside the app</h2>
           <p class="section-lead">
-            Flip the <strong>iOS / Android</strong> switch in the nav to preview both platforms.
+            Use the nav switches for <strong>iOS / Android</strong> and <strong>Light / Dark</strong> — same look as in the app.
             <span class="android-note" style="display:inline;margin:0;"> (Android art is placeholder until final shots land.)</span>
           </p>
         </div>
@@ -902,9 +939,11 @@
               <div class="phone-screen">
                 <img
                   data-screen
-                  data-ios-src="assets/screens/ios/search.png"
-                  data-android-src="assets/screens/android/search.svg"
-                  src="assets/screens/ios/search.png"
+                  data-ios-light="assets/screens/ios/light/search.png"
+                  data-ios-dark="assets/screens/ios/dark/search.png"
+                  data-android-light="assets/screens/android/light/search.svg"
+                  data-android-dark="assets/screens/android/dark/search.svg"
+                  src="assets/screens/ios/light/search.png"
                   alt="Search and comic entry form"
                   width="390"
                   height="844"
@@ -919,9 +958,11 @@
               <div class="phone-screen">
                 <img
                   data-screen
-                  data-ios-src="assets/screens/ios/results.png"
-                  data-android-src="assets/screens/android/results.svg"
-                  src="assets/screens/ios/results.png"
+                  data-ios-light="assets/screens/ios/light/results.png"
+                  data-ios-dark="assets/screens/ios/dark/results.png"
+                  data-android-light="assets/screens/android/light/results.svg"
+                  data-android-dark="assets/screens/android/dark/results.svg"
+                  src="assets/screens/ios/light/results.png"
                   alt="Expandable results tree"
                   width="390"
                   height="844"
@@ -936,9 +977,11 @@
               <div class="phone-screen">
                 <img
                   data-screen
-                  data-ios-src="assets/screens/ios/history.png"
-                  data-android-src="assets/screens/android/history.svg"
-                  src="assets/screens/ios/history.png"
+                  data-ios-light="assets/screens/ios/light/history.png"
+                  data-ios-dark="assets/screens/ios/dark/history.png"
+                  data-android-light="assets/screens/android/light/history.svg"
+                  data-android-dark="assets/screens/android/dark/history.svg"
+                  src="assets/screens/ios/light/history.png"
                   alt="Search history list"
                   width="390"
                   height="844"
@@ -1064,9 +1107,12 @@
 
   <script>
     (function () {
-      var STORAGE_KEY = "comic-coin-platform";
+      var PLATFORM_KEY = "comic-coin-platform";
+      var THEME_KEY = "comic-coin-theme";
       var root = document.documentElement;
-      var toggle = document.getElementById("platform-switch");
+      var platformToggle = document.getElementById("platform-switch");
+      var themeToggle = document.getElementById("theme-switch");
+      var themeMeta = document.getElementById("meta-theme-color");
       var yearEl = document.getElementById("year");
       if (yearEl) yearEl.textContent = String(new Date().getFullYear());
 
@@ -1074,40 +1120,95 @@
         return root.getAttribute("data-platform") === "android" ? "android" : "ios";
       }
 
+      function theme() {
+        return root.getAttribute("data-theme") === "dark" ? "dark" : "light";
+      }
+
+      function screenAttr(p, t) {
+        return "data-" + p + "-" + t;
+      }
+
+      function applyScreens() {
+        var p = platform();
+        var t = theme();
+        var attr = screenAttr(p, t);
+        document.querySelectorAll("[data-screen]").forEach(function (img) {
+          var src = img.getAttribute(attr);
+          if (src) img.setAttribute("src", src);
+        });
+        var hero = document.getElementById("hero-screen");
+        if (hero) {
+          hero.setAttribute(
+            "alt",
+            "Comic Coin search screen on " +
+              (p === "android" ? "Android" : "iOS") +
+              " (" + t + " mode)"
+          );
+        }
+        document.querySelectorAll("[data-platform-label]").forEach(function (el) {
+          el.textContent = p === "android" ? "Android" : "iOS";
+        });
+        document.querySelectorAll("[data-theme-label]").forEach(function (el) {
+          el.textContent = t === "dark" ? "Dark" : "Light";
+        });
+      }
+
       function applyPlatform(p) {
         var next = p === "android" ? "android" : "ios";
         root.setAttribute("data-platform", next);
-        if (toggle) {
-          toggle.checked = next === "android";
-          toggle.setAttribute("aria-checked", next === "android" ? "true" : "false");
+        if (platformToggle) {
+          platformToggle.checked = next === "android";
+          platformToggle.setAttribute("aria-checked", next === "android" ? "true" : "false");
         }
-        document.querySelectorAll("[data-screen]").forEach(function (img) {
-          var src = next === "android" ? img.getAttribute("data-android-src") : img.getAttribute("data-ios-src");
-          if (src) img.setAttribute("src", src);
-          var base = img.getAttribute("alt") || "";
-          // Keep alt informative without getting too noisy
-          if (img.id === "hero-screen") {
-            img.setAttribute("alt", "Comic Coin search screen on " + (next === "android" ? "Android" : "iOS"));
-          }
-        });
-        document.querySelectorAll("[data-platform-label]").forEach(function (el) {
-          el.textContent = next === "android" ? "Android" : "iOS";
-        });
+        applyScreens();
         try {
-          localStorage.setItem(STORAGE_KEY, next);
+          localStorage.setItem(PLATFORM_KEY, next);
         } catch (e) { /* ignore */ }
       }
 
-      // Restore preference
-      var saved = null;
-      try {
-        saved = localStorage.getItem(STORAGE_KEY);
-      } catch (e) { /* ignore */ }
-      applyPlatform(saved === "android" ? "android" : "ios");
+      function applyTheme(t) {
+        var next = t === "dark" ? "dark" : "light";
+        root.setAttribute("data-theme", next);
+        if (themeToggle) {
+          themeToggle.checked = next === "dark";
+          themeToggle.setAttribute("aria-checked", next === "dark" ? "true" : "false");
+        }
+        if (themeMeta) {
+          themeMeta.setAttribute("content", next === "dark" ? "#121218" : "#f6f0e4");
+        }
+        applyScreens();
+        try {
+          localStorage.setItem(THEME_KEY, next);
+        } catch (e) { /* ignore */ }
+      }
 
-      if (toggle) {
-        toggle.addEventListener("change", function () {
-          applyPlatform(toggle.checked ? "android" : "ios");
+      var savedPlatform = null;
+      var savedTheme = null;
+      try {
+        savedPlatform = localStorage.getItem(PLATFORM_KEY);
+        savedTheme = localStorage.getItem(THEME_KEY);
+      } catch (e) { /* ignore */ }
+
+      // Prefer saved theme; else match system preference once
+      if (!savedTheme && window.matchMedia) {
+        try {
+          if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+            savedTheme = "dark";
+          }
+        } catch (e) { /* ignore */ }
+      }
+
+      applyPlatform(savedPlatform === "android" ? "android" : "ios");
+      applyTheme(savedTheme === "dark" ? "dark" : "light");
+
+      if (platformToggle) {
+        platformToggle.addEventListener("change", function () {
+          applyPlatform(platformToggle.checked ? "android" : "ios");
+        });
+      }
+      if (themeToggle) {
+        themeToggle.addEventListener("change", function () {
+          applyTheme(themeToggle.checked ? "dark" : "light");
         });
       }
 
