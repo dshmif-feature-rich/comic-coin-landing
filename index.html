@@ -77,6 +77,8 @@
       font-family: var(--font-display);
       font-size: 1.55rem;
       letter-spacing: 0.04em;
+      white-space: nowrap;
+      flex-shrink: 0;
     }
     .brand img {
       width: 40px;
@@ -110,9 +112,10 @@
     .nav-actions {
       display: flex;
       align-items: center;
-      flex-wrap: wrap;
+      flex-wrap: nowrap;
       justify-content: flex-end;
       gap: 0.45rem;
+      position: relative;
     }
     .nav-cta {
       display: none;
@@ -128,14 +131,19 @@
     .nav-cta:hover { background: #fff; color: var(--ink); }
 
     /* Preview toggles (platform + theme) */
+    .preview-toggles {
+      display: none;
+      align-items: center;
+      gap: 0.45rem;
+    }
     .preview-toggle {
       display: inline-flex;
       align-items: center;
-      gap: 0.35rem;
+      gap: 0.3rem;
       background: #1c1c24;
       border: 2px solid #3a3a48;
       border-radius: 999px;
-      padding: 0.22rem 0.5rem 0.22rem 0.55rem;
+      padding: 0.2rem 0.45rem;
       color: #ddd;
       font-size: 0.72rem;
       font-weight: 800;
@@ -180,11 +188,126 @@
     .switch input:checked + .slider.theme-slider { background: #7c5cff; }
     .switch input:checked + .slider::before { transform: translateX(18px); }
     .switch input:focus-visible + .slider { outline: 2px solid var(--gold); outline-offset: 2px; }
-    .toggle-side { opacity: 0.55; transition: opacity 0.15s; }
+    .toggle-side {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 1.15rem;
+      height: 1.15rem;
+      opacity: 0.45;
+      transition: opacity 0.15s, color 0.15s;
+      color: #aaa;
+    }
+    .toggle-side svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
     html[data-platform="ios"] .toggle-ios,
     html[data-platform="android"] .toggle-android,
     html[data-theme="light"] .toggle-light,
-    html[data-theme="dark"] .toggle-dark { opacity: 1; color: #fff; }
+    html[data-theme="dark"] .toggle-dark {
+      opacity: 1;
+      color: #fff;
+    }
+
+    /* Boom menu (mobile/compact nav) — explosion instead of hamburger */
+    .boom-menu {
+      position: relative;
+      display: block;
+    }
+    .boom-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 42px;
+      height: 42px;
+      padding: 0;
+      border: 2px solid var(--gold);
+      border-radius: 12px;
+      background: #1c1c24;
+      color: var(--gold);
+      cursor: pointer;
+      transition: transform 0.12s, background 0.15s, color 0.15s;
+    }
+    .boom-btn:hover,
+    .boom-btn[aria-expanded="true"] {
+      background: var(--gold);
+      color: var(--ink);
+    }
+    .boom-btn:focus-visible {
+      outline: 2px solid var(--gold);
+      outline-offset: 2px;
+    }
+    .boom-btn svg {
+      width: 24px;
+      height: 24px;
+      display: block;
+    }
+    .boom-panel {
+      display: none;
+      position: absolute;
+      top: calc(100% + 10px);
+      right: 0;
+      z-index: 60;
+      min-width: 200px;
+      padding: 0.75rem;
+      background: #14141c;
+      border: 3px solid var(--gold);
+      border-radius: 14px;
+      box-shadow: 6px 6px 0 rgba(0,0,0,0.45);
+      flex-direction: column;
+      gap: 0.55rem;
+    }
+    .boom-menu.is-open .boom-panel { display: flex; }
+    .boom-panel-label {
+      font-family: var(--font-display);
+      font-size: 0.85rem;
+      letter-spacing: 0.06em;
+      color: var(--gold);
+      margin: 0 0 0.15rem;
+    }
+    .boom-panel .preview-toggle {
+      width: 100%;
+      justify-content: space-between;
+      padding: 0.35rem 0.55rem;
+    }
+
+    /* Desktop: show inline toggles, hide boom menu */
+    @media (min-width: 720px) {
+      .preview-toggles { display: flex; }
+      .boom-menu { display: none; }
+    }
+
+    /* Inline clickable controls in Evidence Locker */
+    .preview-link {
+      appearance: none;
+      border: none;
+      background: transparent;
+      padding: 0 0.05em;
+      margin: 0;
+      font: inherit;
+      font-weight: 800;
+      color: var(--blue);
+      cursor: pointer;
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 0.15em;
+      border-radius: 4px;
+    }
+    .preview-link:hover { color: var(--red); }
+    .preview-link:focus-visible {
+      outline: 2px solid var(--blue);
+      outline-offset: 2px;
+    }
+    .preview-link.is-active {
+      color: var(--ink);
+      text-decoration-color: var(--gold);
+      background: linear-gradient(transparent 60%, rgba(255, 215, 0, 0.45) 60%);
+    }
+    .preview-link-group {
+      white-space: nowrap;
+    }
 
     /* —— Buttons —— */
     .btn {
@@ -754,7 +877,7 @@
     /* Reduced motion */
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
-      .btn, .power-card, .slider, .slider::before, .toggle-side {
+      .btn, .power-card, .slider, .slider::before, .toggle-side, .boom-btn {
         transition: none !important;
       }
       .pow-wrap { transform: none; }
@@ -779,22 +902,71 @@
         </ul>
       </nav>
       <div class="nav-actions">
-        <div class="preview-toggle" title="Switch app screenshots between iOS and Android">
-          <span class="toggle-side toggle-ios">iOS</span>
-          <label class="switch">
-            <input type="checkbox" id="platform-switch" role="switch" aria-checked="false" aria-label="Show Android screenshots" />
-            <span class="slider platform-slider" aria-hidden="true"></span>
-          </label>
-          <span class="toggle-side toggle-android">Android</span>
+        <div class="preview-toggles" id="preview-toggles-desktop">
+          <div class="preview-toggle" title="Switch app screenshots between iOS and Android">
+            <span class="toggle-side toggle-ios" aria-hidden="true" title="iOS">
+              <svg viewBox="0 0 24 24" fill="currentColor" focusable="false"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.37 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+            </span>
+            <label class="switch">
+              <input type="checkbox" id="platform-switch" role="switch" aria-checked="false" aria-label="Show Android screenshots" />
+              <span class="slider platform-slider" aria-hidden="true"></span>
+            </label>
+            <span class="toggle-side toggle-android" aria-hidden="true" title="Android">
+              <svg viewBox="0 0 24 24" fill="currentColor" focusable="false"><path d="M17.6 9.48l1.84-3.18c.16-.31.04-.69-.26-.85a.637.637 0 0 0-.83.22l-1.88 3.24a11.43 11.43 0 0 0-8.94 0L5.65 5.67a.643.643 0 0 0-.87-.2c-.28.18-.37.54-.22.83L6.4 9.48A10.81 10.81 0 0 0 1 18h22a10.81 10.81 0 0 0-5.4-8.52M7 15.25a1.25 1.25 0 1 1 0-2.5 1.25 1.25 0 0 1 0 2.5m10 0a1.25 1.25 0 1 1 0-2.5 1.25 1.25 0 0 1 0 2.5"/></svg>
+            </span>
+          </div>
+          <div class="preview-toggle" title="Switch app screenshots between light and dark mode">
+            <span class="toggle-side toggle-light" aria-hidden="true" title="Light">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" focusable="false"><circle cx="12" cy="12" r="4" fill="currentColor" stroke="none"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+            </span>
+            <label class="switch">
+              <input type="checkbox" id="theme-switch" role="switch" aria-checked="false" aria-label="Show dark mode app screenshots" />
+              <span class="slider theme-slider" aria-hidden="true"></span>
+            </label>
+            <span class="toggle-side toggle-dark" aria-hidden="true" title="Dark">
+              <svg viewBox="0 0 24 24" fill="currentColor" focusable="false"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+            </span>
+          </div>
         </div>
-        <div class="preview-toggle" title="Switch app screenshots between light and dark mode">
-          <span class="toggle-side toggle-light">Light</span>
-          <label class="switch">
-            <input type="checkbox" id="theme-switch" role="switch" aria-checked="false" aria-label="Show dark mode app screenshots" />
-            <span class="slider theme-slider" aria-hidden="true"></span>
-          </label>
-          <span class="toggle-side toggle-dark">Dark</span>
+
+        <div class="boom-menu" id="boom-menu">
+          <button type="button" class="boom-btn" id="boom-btn" aria-expanded="false" aria-controls="boom-panel" aria-label="Open preview controls">
+            <!-- Comic explosion / boom icon (instead of hamburger) -->
+            <svg viewBox="0 0 24 24" fill="currentColor" focusable="false" aria-hidden="true">
+              <path d="M12 2l1.1 3.9 2.7-2.1-.2 4 3.8-1.3-1.6 3.6 4 .4-3.2 2.5 3.2 2.5-4 .4 1.6 3.6-3.8-1.3.2 4-2.7-2.1L12 22l-1.1-3.9-2.7 2.1.2-4-3.8 1.3 1.6-3.6-4-.4 3.2-2.5L1.6 9.5l4-.4L4 5.5l3.8 1.3-.2-4 2.7 2.1L12 2z"/>
+              <circle cx="12" cy="12" r="3.6" fill="#0b0b0f"/>
+              <circle cx="12" cy="12" r="1.7" fill="currentColor"/>
+            </svg>
+          </button>
+          <div class="boom-panel" id="boom-panel" role="region" aria-label="Preview controls">
+            <p class="boom-panel-label">Preview</p>
+            <div class="preview-toggle" title="Switch app screenshots between iOS and Android">
+              <span class="toggle-side toggle-ios" aria-hidden="true" title="iOS">
+                <svg viewBox="0 0 24 24" fill="currentColor" focusable="false"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.37 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+              </span>
+              <label class="switch">
+                <input type="checkbox" id="platform-switch-mobile" role="switch" aria-checked="false" aria-label="Show Android screenshots" />
+                <span class="slider platform-slider" aria-hidden="true"></span>
+              </label>
+              <span class="toggle-side toggle-android" aria-hidden="true" title="Android">
+                <svg viewBox="0 0 24 24" fill="currentColor" focusable="false"><path d="M17.6 9.48l1.84-3.18c.16-.31.04-.69-.26-.85a.637.637 0 0 0-.83.22l-1.88 3.24a11.43 11.43 0 0 0-8.94 0L5.65 5.67a.643.643 0 0 0-.87-.2c-.28.18-.37.54-.22.83L6.4 9.48A10.81 10.81 0 0 0 1 18h22a10.81 10.81 0 0 0-5.4-8.52M7 15.25a1.25 1.25 0 1 1 0-2.5 1.25 1.25 0 0 1 0 2.5m10 0a1.25 1.25 0 1 1 0-2.5 1.25 1.25 0 0 1 0 2.5"/></svg>
+              </span>
+            </div>
+            <div class="preview-toggle" title="Switch app screenshots between light and dark mode">
+              <span class="toggle-side toggle-light" aria-hidden="true" title="Light">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" focusable="false"><circle cx="12" cy="12" r="4" fill="currentColor" stroke="none"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+              </span>
+              <label class="switch">
+                <input type="checkbox" id="theme-switch-mobile" role="switch" aria-checked="false" aria-label="Show dark mode app screenshots" />
+                <span class="slider theme-slider" aria-hidden="true"></span>
+              </label>
+              <span class="toggle-side toggle-dark" aria-hidden="true" title="Dark">
+                <svg viewBox="0 0 24 24" fill="currentColor" focusable="false"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+              </span>
+            </div>
+          </div>
         </div>
+
         <a class="nav-cta" href="#download">Get the app</a>
       </div>
     </div>
@@ -945,7 +1117,19 @@
           <span class="section-kicker">Evidence locker</span>
           <h2 id="gallery-title" class="section-title">Inside the app</h2>
           <p class="section-lead">
-            Use the nav switches for <strong>iOS / Android</strong> and <strong>Light / Dark</strong> — same look as in the app.
+            Tap
+            <span class="preview-link-group">
+              <button type="button" class="preview-link" data-set-platform="ios">iOS</button>
+              /
+              <button type="button" class="preview-link" data-set-platform="android">Android</button>
+            </span>
+            and
+            <span class="preview-link-group">
+              <button type="button" class="preview-link" data-set-theme="light">Light</button>
+              /
+              <button type="button" class="preview-link" data-set-theme="dark">Dark</button>
+            </span>
+            to flip the previews — same look as in the app.
             <span class="android-note" style="display:inline;margin:0;"> (Android art is placeholder until final shots land.)</span>
           </p>
         </div>
@@ -1100,7 +1284,7 @@
           <details class="faq">
             <summary>Is Comic Coin on iOS and Android?</summary>
             <div class="faq-body">
-              <p>Yes — one Flutter app for both platforms. Use the iOS / Android switch on this page to preview screenshots for each.</p>
+              <p>Yes — one Flutter app for both platforms. Use the platform switch (or the links in Evidence Locker) to preview screenshots for each.</p>
             </div>
           </details>
           <details class="faq">
@@ -1155,8 +1339,16 @@
       var PLATFORM_KEY = "comic-coin-platform";
       var THEME_KEY = "comic-coin-theme";
       var root = document.documentElement;
-      var platformToggle = document.getElementById("platform-switch");
-      var themeToggle = document.getElementById("theme-switch");
+      var platformToggles = [
+        document.getElementById("platform-switch"),
+        document.getElementById("platform-switch-mobile")
+      ].filter(Boolean);
+      var themeToggles = [
+        document.getElementById("theme-switch"),
+        document.getElementById("theme-switch-mobile")
+      ].filter(Boolean);
+      var boomMenu = document.getElementById("boom-menu");
+      var boomBtn = document.getElementById("boom-btn");
       var yearEl = document.getElementById("year");
       if (yearEl) yearEl.textContent = String(new Date().getFullYear());
 
@@ -1171,6 +1363,17 @@
 
       function screenAttr(p, t) {
         return "data-" + p + "-" + t;
+      }
+
+      function syncPreviewLinks() {
+        var p = platform();
+        var t = theme();
+        document.querySelectorAll("[data-set-platform]").forEach(function (el) {
+          el.classList.toggle("is-active", el.getAttribute("data-set-platform") === p);
+        });
+        document.querySelectorAll("[data-set-theme]").forEach(function (el) {
+          el.classList.toggle("is-active", el.getAttribute("data-set-theme") === t);
+        });
       }
 
       function applyScreens() {
@@ -1196,15 +1399,16 @@
         document.querySelectorAll("[data-theme-label]").forEach(function (el) {
           el.textContent = t === "dark" ? "Dark" : "Light";
         });
+        syncPreviewLinks();
       }
 
       function applyPlatform(p) {
         var next = p === "android" ? "android" : "ios";
         root.setAttribute("data-platform", next);
-        if (platformToggle) {
-          platformToggle.checked = next === "android";
-          platformToggle.setAttribute("aria-checked", next === "android" ? "true" : "false");
-        }
+        platformToggles.forEach(function (toggle) {
+          toggle.checked = next === "android";
+          toggle.setAttribute("aria-checked", next === "android" ? "true" : "false");
+        });
         applyScreens();
         try {
           localStorage.setItem(PLATFORM_KEY, next);
@@ -1214,10 +1418,10 @@
       function applyTheme(t) {
         var next = t === "dark" ? "dark" : "light";
         root.setAttribute("data-theme", next);
-        if (themeToggle) {
-          themeToggle.checked = next === "dark";
-          themeToggle.setAttribute("aria-checked", next === "dark" ? "true" : "false");
-        }
+        themeToggles.forEach(function (toggle) {
+          toggle.checked = next === "dark";
+          toggle.setAttribute("aria-checked", next === "dark" ? "true" : "false");
+        });
         applyScreens();
         try {
           localStorage.setItem(THEME_KEY, next);
@@ -1234,15 +1438,56 @@
       applyPlatform(savedPlatform === "android" ? "android" : "ios");
       applyTheme(savedTheme === "dark" ? "dark" : "light");
 
-      if (platformToggle) {
-        platformToggle.addEventListener("change", function () {
-          applyPlatform(platformToggle.checked ? "android" : "ios");
+      platformToggles.forEach(function (toggle) {
+        toggle.addEventListener("change", function () {
+          applyPlatform(toggle.checked ? "android" : "ios");
         });
+      });
+      themeToggles.forEach(function (toggle) {
+        toggle.addEventListener("change", function () {
+          applyTheme(toggle.checked ? "dark" : "light");
+        });
+      });
+
+      // Evidence Locker inline controls
+      document.querySelectorAll("[data-set-platform]").forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          applyPlatform(btn.getAttribute("data-set-platform"));
+        });
+      });
+      document.querySelectorAll("[data-set-theme]").forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          applyTheme(btn.getAttribute("data-set-theme"));
+        });
+      });
+
+      // Boom menu (compact nav)
+      function setBoomOpen(open) {
+        if (!boomMenu || !boomBtn) return;
+        boomMenu.classList.toggle("is-open", open);
+        boomBtn.setAttribute("aria-expanded", open ? "true" : "false");
+        boomBtn.setAttribute("aria-label", open ? "Close preview controls" : "Open preview controls");
       }
-      if (themeToggle) {
-        themeToggle.addEventListener("change", function () {
-          applyTheme(themeToggle.checked ? "dark" : "light");
+
+      if (boomBtn && boomMenu) {
+        boomBtn.addEventListener("click", function (e) {
+          e.stopPropagation();
+          setBoomOpen(!boomMenu.classList.contains("is-open"));
         });
+        document.addEventListener("click", function (e) {
+          if (!boomMenu.classList.contains("is-open")) return;
+          if (!boomMenu.contains(e.target)) setBoomOpen(false);
+        });
+        document.addEventListener("keydown", function (e) {
+          if (e.key === "Escape") setBoomOpen(false);
+        });
+        // Close when resizing into desktop layout
+        var mq = window.matchMedia("(min-width: 720px)");
+        function onMq(e) {
+          if (e.matches) setBoomOpen(false);
+        }
+        if (mq.addEventListener) mq.addEventListener("change", onMq);
+        else if (mq.addListener) mq.addListener(onMq);
       }
 
       // Soft-block "coming soon" store links
