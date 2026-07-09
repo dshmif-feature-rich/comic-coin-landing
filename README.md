@@ -10,7 +10,7 @@ Designed for **GitHub Pages**: no build step. Single-page layout plus a public p
 |------|---------|
 | `index.html` | Landing page (markup, CSS, JS) |
 | `privacy.html` | Public privacy policy (store URL target) |
-| `assets/icon.png` | App icon |
+| `assets/comic-coin-icon.png` | App icon |
 | `assets/hero-bg.webp` | Golden Age hero backdrop |
 | `assets/screens/ios/light/` · `…/dark/` | iOS screenshots (search, results, history) |
 | `assets/screens/android/light/` · `…/dark/` | Android shots (SVG placeholders until real PNGs land) |
