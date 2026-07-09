@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Comic Coin — Comic prices. Comic style.</title>
   <meta name="description" content="Track comic book prices with style using the power of AI or the PriceCharting API. Jump in with AI estimates — PriceCharting is BYOK." />
-  <meta name="theme-color" content="#f6f0e4" id="meta-theme-color" />
+  <meta name="theme-color" content="#0b0b0f" />
   <link rel="icon" href="assets/icon.png" type="image/png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -23,32 +23,11 @@
       --muted: #4a463c;
       --panel: #fffdf8;
       --shadow: 6px 6px 0 var(--ink);
-      --dot: rgba(11,11,15,0.08);
-      --hero-scrim: linear-gradient(110deg, rgba(246,240,228,0.96) 0%, rgba(246,240,228,0.88) 42%, rgba(246,240,228,0.55) 100%);
-      --how-bg: rgba(255,255,255,0.35);
-      --chip-ai: #e8f0ff;
-      --chip-byok: #fff4cc;
       --radius: 14px;
       --nav-h: 64px;
       --max: 1120px;
       --font-display: "Bangers", "Impact", "Arial Black", system-ui, sans-serif;
       --font-body: "Nunito", system-ui, -apple-system, sans-serif;
-    }
-
-    html[data-theme="dark"] {
-      --ink: #f2efe6;
-      --paper: #121218;
-      --paper-2: #0b0b10;
-      --muted: #b8b0a0;
-      --panel: #1c1c26;
-      --shadow: 6px 6px 0 #000;
-      --dot: rgba(255,215,0,0.08);
-      --hero-scrim: linear-gradient(110deg, rgba(18,18,24,0.94) 0%, rgba(18,18,24,0.88) 42%, rgba(18,18,24,0.62) 100%);
-      --how-bg: rgba(0,0,0,0.28);
-      --chip-ai: #1a2740;
-      --chip-byok: #3a3010;
-      --blue: #6ea8ff;
-      --blue-bright: #93c5fd;
     }
 
     *, *::before, *::after { box-sizing: border-box; }
@@ -58,10 +37,9 @@
       font-family: var(--font-body);
       color: var(--ink);
       background:
-        radial-gradient(circle at 1px 1px, var(--dot) 1px, transparent 0) 0 0 / 14px 14px,
+        radial-gradient(circle at 1px 1px, rgba(11,11,15,0.08) 1px, transparent 0) 0 0 / 14px 14px,
         linear-gradient(180deg, var(--paper) 0%, var(--paper-2) 100%);
       line-height: 1.55;
-      transition: background 0.2s, color 0.2s;
     }
     img { max-width: 100%; display: block; }
     a { color: var(--blue); }
@@ -297,7 +275,7 @@
       position: absolute;
       inset: 0;
       background:
-        var(--hero-scrim),
+        linear-gradient(110deg, rgba(246,240,228,0.96) 0%, rgba(246,240,228,0.88) 42%, rgba(246,240,228,0.55) 100%),
         url("assets/hero-bg.webp") center / cover no-repeat;
       z-index: 0;
       filter: saturate(1.05);
@@ -405,8 +383,8 @@
       font-size: 0.88rem;
       box-shadow: 3px 3px 0 var(--ink);
     }
-    .path-chip.ai { background: var(--chip-ai); }
-    .path-chip.byok { background: var(--chip-byok); }
+    .path-chip.ai { background: #e8f0ff; }
+    .path-chip.byok { background: #fff4cc; }
     .stamp {
       display: inline-block;
       font-family: var(--font-display);
@@ -738,7 +716,7 @@
     /* Reduced motion */
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
-      .btn, .power-card, .slider, .slider::before, .toggle-side, body {
+      .btn, .power-card, .slider, .slider::before, .toggle-side {
         transition: none !important;
       }
       .pow-wrap { transform: none; }
@@ -771,10 +749,10 @@
           </label>
           <span class="toggle-side toggle-android">Android</span>
         </div>
-        <div class="preview-toggle" title="Switch light and dark app screenshots">
+        <div class="preview-toggle" title="Switch app screenshots between light and dark mode">
           <span class="toggle-side toggle-light">Light</span>
           <label class="switch">
-            <input type="checkbox" id="theme-switch" role="switch" aria-checked="false" aria-label="Show dark mode screenshots" />
+            <input type="checkbox" id="theme-switch" role="switch" aria-checked="false" aria-label="Show dark mode app screenshots" />
             <span class="slider theme-slider" aria-hidden="true"></span>
           </label>
           <span class="toggle-side toggle-dark">Dark</span>
@@ -895,7 +873,7 @@
     </section>
 
     <!-- How it works -->
-    <section id="how" aria-labelledby="how-title" style="background: var(--how-bg);">
+    <section id="how" aria-labelledby="how-title" style="background: rgba(255,255,255,0.35);">
       <div class="wrap">
         <div class="section-head">
           <span class="section-kicker">Origin story</span>
@@ -1112,7 +1090,6 @@
       var root = document.documentElement;
       var platformToggle = document.getElementById("platform-switch");
       var themeToggle = document.getElementById("theme-switch");
-      var themeMeta = document.getElementById("meta-theme-color");
       var yearEl = document.getElementById("year");
       if (yearEl) yearEl.textContent = String(new Date().getFullYear());
 
@@ -1120,6 +1097,7 @@
         return root.getAttribute("data-platform") === "android" ? "android" : "ios";
       }
 
+      // Screenshot appearance only — does not restyle the landing page chrome.
       function theme() {
         return root.getAttribute("data-theme") === "dark" ? "dark" : "light";
       }
@@ -1173,9 +1151,6 @@
           themeToggle.checked = next === "dark";
           themeToggle.setAttribute("aria-checked", next === "dark" ? "true" : "false");
         }
-        if (themeMeta) {
-          themeMeta.setAttribute("content", next === "dark" ? "#121218" : "#f6f0e4");
-        }
         applyScreens();
         try {
           localStorage.setItem(THEME_KEY, next);
@@ -1188,15 +1163,6 @@
         savedPlatform = localStorage.getItem(PLATFORM_KEY);
         savedTheme = localStorage.getItem(THEME_KEY);
       } catch (e) { /* ignore */ }
-
-      // Prefer saved theme; else match system preference once
-      if (!savedTheme && window.matchMedia) {
-        try {
-          if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
-            savedTheme = "dark";
-          }
-        } catch (e) { /* ignore */ }
-      }
 
       applyPlatform(savedPlatform === "android" ? "android" : "ios");
       applyTheme(savedTheme === "dark" ? "dark" : "light");

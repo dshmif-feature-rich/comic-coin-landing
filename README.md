@@ -62,9 +62,8 @@ If you use `.png`, update every `data-android-light` / `data-android-dark` path 
 ### Preview toggles
 
 - **Platform:** defaults to **iOS** (`localStorage`: `comic-coin-platform`)
-- **Theme:** defaults to **Light**, or system dark if preferred (`localStorage`: `comic-coin-theme`)
+- **Theme:** defaults to **Light** (`localStorage`: `comic-coin-theme`) — swaps **app screenshots only**, not site styling
 - Both nav switches combine: all `[data-screen]` images use `data-{ios|android}-{light|dark}`
-- Page chrome also follows light/dark so screenshots match the surrounding UI
 
 ### Copy notes
 
