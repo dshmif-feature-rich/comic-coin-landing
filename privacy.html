@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Privacy Policy — Comic Coin</title>
+  <meta name="description" content="Comic Coin privacy policy. Local-first: your API key and search history stay on your device." />
+  <meta name="theme-color" content="#0b0b0f" />
+  <link rel="icon" href="assets/icon.png" type="image/png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --ink: #0b0b0f;
+      --paper: #f6f0e4;
+      --gold: #ffd700;
+      --muted: #4a463c;
+      --panel: #fffdf8;
+      --font-display: "Bangers", "Impact", system-ui, sans-serif;
+      --font-body: "Nunito", system-ui, sans-serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: var(--font-body);
+      color: var(--ink);
+      background: var(--paper);
+      line-height: 1.6;
+    }
+    a { color: #1d4ed8; font-weight: 700; }
+    a:hover { color: #e6392b; }
+    header {
+      background: var(--ink);
+      color: #fff;
+      border-bottom: 4px solid var(--gold);
+      padding: 1rem 0;
+    }
+    .wrap { width: min(100% - 2rem, 720px); margin-inline: auto; }
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      color: #fff;
+      text-decoration: none;
+      font-family: var(--font-display);
+      font-size: 1.4rem;
+      letter-spacing: 0.04em;
+    }
+    .brand img {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      border: 2px solid var(--gold);
+      background: #fff;
+    }
+    main { padding: 2.5rem 0 4rem; }
+    h1 {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 5vw, 2.75rem);
+      letter-spacing: 0.03em;
+      margin: 0 0 0.35rem;
+      line-height: 1.1;
+    }
+    .meta { color: var(--muted); font-weight: 700; margin: 0 0 2rem; }
+    .panel {
+      background: var(--panel);
+      border: 3px solid var(--ink);
+      border-radius: 14px;
+      box-shadow: 6px 6px 0 var(--ink);
+      padding: 1.5rem 1.35rem 1.75rem;
+    }
+    h2 {
+      font-family: var(--font-display);
+      font-size: 1.45rem;
+      letter-spacing: 0.03em;
+      margin: 1.75rem 0 0.5rem;
+    }
+    h2:first-child { margin-top: 0; }
+    p, li { font-weight: 600; color: var(--muted); }
+    p { margin: 0 0 0.85rem; }
+    ul { margin: 0 0 0.85rem; padding-left: 1.25rem; }
+    li { margin-bottom: 0.35rem; }
+    strong { color: var(--ink); }
+    .back { display: inline-block; margin-bottom: 1.25rem; font-weight: 800; }
+    footer {
+      background: var(--ink);
+      color: #c9c9d1;
+      padding: 1.5rem 0;
+      border-top: 4px solid var(--gold);
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <a class="brand" href="index.html">
+        <img src="assets/icon.png" width="36" height="36" alt="" />
+        Comic Coin
+      </a>
+    </div>
+  </header>
+
+  <main>
+    <div class="wrap">
+      <a class="back" href="index.html">← Back to Comic Coin</a>
+      <h1>Privacy Policy</h1>
+      <p class="meta">Effective Date: July 1, 2026</p>
+
+      <div class="panel">
+        <p>Comic Coin ("we", "us", or "our") is committed to protecting your privacy. This Privacy Policy explains how we handle information when you use our mobile application (the "App").</p>
+
+        <h2>Information We Collect</h2>
+        <p>Comic Coin is designed to be privacy-friendly:</p>
+        <ul>
+          <li><strong>No personal accounts or login</strong> — You do not create an account with us.</li>
+          <li><strong>API Key</strong>: You may optionally provide a PriceCharting API token. This key is stored <strong>locally on your device</strong> using secure storage (FlutterSecureStorage) and is <strong>never transmitted to our servers</strong>.</li>
+          <li><strong>Search History</strong>: Your recent comic searches are stored locally on your device only. You can view, retry, load, or delete them at any time.</li>
+          <li><strong>No analytics or tracking</strong>: We do not collect usage data, device identifiers, or any analytics.</li>
+          <li><strong>No data shared with third parties</strong>: We do not sell, rent, or share any information.</li>
+        </ul>
+
+        <h2>How the App Works</h2>
+        <ul>
+          <li>Price lookups via PriceCharting are performed directly between your device and PriceCharting's servers using the token you provide (bring your own key).</li>
+          <li>Market data (sold records, velocity) is scraped from PriceCharting's public product pages when available.</li>
+          <li>Optional AI estimates use a privacy-friendly backend with short-lived credentials and device quotas; see the app configuration for details.</li>
+          <li>Search history and your API key remain on your device.</li>
+        </ul>
+
+        <h2>Third-Party Services</h2>
+        <p>The App may use:</p>
+        <ul>
+          <li><strong>PriceCharting API</strong> (<a href="https://www.pricecharting.com" rel="noopener noreferrer">pricecharting.com</a>) — You must provide your own API token. Their privacy practices are governed by their own policies.</li>
+        </ul>
+
+        <h2>Data Security</h2>
+        <p>Your API key and history are stored using the platform's secure storage mechanisms (Keychain on iOS, encrypted SharedPreferences on Android). We do not have access to this data.</p>
+
+        <h2>Children's Privacy</h2>
+        <p>The App is not directed to children under 13. We do not knowingly collect information from children.</p>
+
+        <h2>Changes to This Policy</h2>
+        <p>We may update this Privacy Policy from time to time. We will notify you of any changes by updating the "Effective Date" at the top of this policy and in the App if appropriate.</p>
+
+        <h2>Contact Us</h2>
+        <p>
+          If you have any questions about this Privacy Policy, please contact us via
+          <strong>dshmif</strong> on GitHub:
+          <a href="https://github.com/dshmif" rel="noopener noreferrer">github.com/dshmif</a>
+        </p>
+        <p>
+          Or open an issue on the
+          <a href="https://github.com/dshmif/comics-flutter" rel="noopener noreferrer">comics-flutter</a>
+          repository.
+        </p>
+        <p><em>This is a minimal privacy policy suitable for a local-first utility app. No personal data from search history or your PriceCharting key is sold or shared by Comic Coin.</em></p>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <a href="index.html" style="color:#ffd700;">← Comic Coin home</a>
+      · © 2026 Comic Coin
+    </div>
+  </footer>
+</body>
+</html>

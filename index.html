@@ -1,0 +1,1123 @@
+<!DOCTYPE html>
+<html lang="en" data-platform="ios">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Comic Coin — Comic prices. Comic style.</title>
+  <meta name="description" content="Track comic book prices with style using the power of AI or the PriceCharting API. Jump in with AI estimates — PriceCharting is BYOK." />
+  <meta name="theme-color" content="#0b0b0f" />
+  <link rel="icon" href="assets/icon.png" type="image/png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --ink: #0b0b0f;
+      --paper: #f6f0e4;
+      --paper-2: #efe6d4;
+      --gold: #ffd700;
+      --gold-deep: #e6b800;
+      --red: #e6392b;
+      --blue: #1d4ed8;
+      --blue-bright: #3b82f6;
+      --muted: #4a463c;
+      --panel: #fffdf8;
+      --shadow: 6px 6px 0 var(--ink);
+      --radius: 14px;
+      --nav-h: 64px;
+      --max: 1120px;
+      --font-display: "Bangers", "Impact", "Arial Black", system-ui, sans-serif;
+      --font-body: "Nunito", system-ui, -apple-system, sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: var(--font-body);
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 1px 1px, rgba(11,11,15,0.08) 1px, transparent 0) 0 0 / 14px 14px,
+        linear-gradient(180deg, var(--paper) 0%, var(--paper-2) 100%);
+      line-height: 1.55;
+    }
+    img { max-width: 100%; display: block; }
+    a { color: var(--blue); }
+    a:hover { color: var(--red); }
+
+    .wrap {
+      width: min(100% - 2rem, var(--max));
+      margin-inline: auto;
+    }
+
+    /* —— Nav —— */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      height: var(--nav-h);
+      background: rgba(11, 11, 15, 0.94);
+      color: #fff;
+      border-bottom: 4px solid var(--gold);
+      backdrop-filter: blur(8px);
+    }
+    .nav-inner {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      text-decoration: none;
+      color: #fff;
+      font-family: var(--font-display);
+      font-size: 1.55rem;
+      letter-spacing: 0.04em;
+    }
+    .brand img {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      border: 2px solid var(--gold);
+      background: #fff;
+    }
+    .brand span {
+      background: linear-gradient(90deg, var(--gold), #fff7b0, var(--gold));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .nav-links {
+      display: none;
+      gap: 1.25rem;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    .nav-links a {
+      color: #f5f5f5;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.95rem;
+    }
+    .nav-links a:hover { color: var(--gold); }
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+    }
+    .nav-cta {
+      display: none;
+      text-decoration: none;
+      font-weight: 800;
+      font-size: 0.85rem;
+      padding: 0.45rem 0.8rem;
+      border: 2px solid var(--gold);
+      border-radius: 999px;
+      color: var(--ink);
+      background: var(--gold);
+    }
+    .nav-cta:hover { background: #fff; color: var(--ink); }
+
+    /* Platform toggle */
+    .platform-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: #1c1c24;
+      border: 2px solid #3a3a48;
+      border-radius: 999px;
+      padding: 0.25rem 0.55rem 0.25rem 0.65rem;
+      color: #ddd;
+      font-size: 0.78rem;
+      font-weight: 800;
+      user-select: none;
+    }
+    .platform-toggle label { cursor: pointer; }
+    .switch {
+      position: relative;
+      width: 44px;
+      height: 24px;
+      display: inline-block;
+    }
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+      position: absolute;
+    }
+    .slider {
+      position: absolute;
+      inset: 0;
+      background: var(--blue);
+      border-radius: 999px;
+      border: 2px solid #fff;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .slider::before {
+      content: "";
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      left: 2px;
+      top: 2px;
+      background: #fff;
+      border-radius: 50%;
+      transition: transform 0.2s;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.35);
+    }
+    .switch input:checked + .slider { background: #3ddc84; }
+    .switch input:checked + .slider::before { transform: translateX(20px); }
+    .switch input:focus-visible + .slider { outline: 2px solid var(--gold); outline-offset: 2px; }
+    .toggle-ios, .toggle-android { opacity: 0.55; transition: opacity 0.15s; }
+    html[data-platform="ios"] .toggle-ios,
+    html[data-platform="android"] .toggle-android { opacity: 1; color: #fff; }
+
+    /* —— Buttons —— */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.45rem;
+      padding: 0.8rem 1.15rem;
+      border-radius: 12px;
+      border: 3px solid var(--ink);
+      font-weight: 800;
+      text-decoration: none;
+      color: var(--ink);
+      background: var(--gold);
+      box-shadow: 4px 4px 0 var(--ink);
+      transition: transform 0.12s, box-shadow 0.12s;
+      cursor: pointer;
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      line-height: 1.1;
+    }
+    .btn:hover {
+      transform: translate(-1px, -1px);
+      box-shadow: 5px 5px 0 var(--ink);
+      color: var(--ink);
+    }
+    .btn:active {
+      transform: translate(2px, 2px);
+      box-shadow: 2px 2px 0 var(--ink);
+    }
+    .btn-dark {
+      background: var(--ink);
+      color: var(--gold);
+    }
+    .btn-dark:hover { color: var(--gold); background: #1a1a22; }
+    .btn-ghost {
+      background: var(--panel);
+    }
+    .btn[aria-disabled="true"],
+    .btn.is-soon {
+      opacity: 0.85;
+      cursor: default;
+    }
+    .btn-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    /* —— Typography —— */
+    .display {
+      font-family: var(--font-display);
+      letter-spacing: 0.03em;
+      line-height: 1.05;
+      margin: 0;
+    }
+    .section-kicker {
+      display: inline-block;
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      letter-spacing: 0.06em;
+      color: var(--red);
+      margin-bottom: 0.35rem;
+    }
+    .section-title {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 4vw, 2.75rem);
+      letter-spacing: 0.03em;
+      margin: 0 0 0.5rem;
+      line-height: 1.05;
+    }
+    .section-lead {
+      color: var(--muted);
+      max-width: 42rem;
+      margin: 0 0 1.75rem;
+      font-size: 1.05rem;
+    }
+    section {
+      padding: 4rem 0;
+    }
+    .section-head { margin-bottom: 0.25rem; }
+
+    /* —— Hero —— */
+    .hero {
+      position: relative;
+      padding: 2.5rem 0 3.5rem;
+      overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(110deg, rgba(246,240,228,0.96) 0%, rgba(246,240,228,0.88) 42%, rgba(246,240,228,0.55) 100%),
+        url("assets/hero-bg.webp") center / cover no-repeat;
+      z-index: 0;
+      filter: saturate(1.05);
+    }
+    .hero-bg::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        -45deg,
+        transparent,
+        transparent 10px,
+        rgba(11,11,15,0.03) 10px,
+        rgba(11,11,15,0.03) 20px
+      );
+      pointer-events: none;
+    }
+    .hero .wrap {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      gap: 2.5rem;
+      align-items: center;
+    }
+    @media (min-width: 900px) {
+      .hero .wrap {
+        grid-template-columns: 1.1fr 0.9fr;
+      }
+      .nav-links { display: flex; }
+      .nav-cta { display: inline-flex; }
+    }
+    .hero h1 {
+      font-size: clamp(2.8rem, 7vw, 4.4rem);
+      margin: 0 0 0.35rem;
+      text-shadow: 3px 3px 0 #fff, 5px 5px 0 var(--ink);
+    }
+    .hero-sub {
+      font-family: var(--font-display);
+      font-size: clamp(1.35rem, 3vw, 1.85rem);
+      color: var(--blue);
+      margin: 0 0 1rem;
+      letter-spacing: 0.04em;
+    }
+    .hero-body {
+      font-size: 1.12rem;
+      max-width: 36rem;
+      margin: 0 0 1.15rem;
+      font-weight: 600;
+    }
+
+    /* POW word */
+    .pow-wrap {
+      display: inline-block;
+      position: relative;
+      vertical-align: baseline;
+      margin: 0 0.12em;
+      transform: rotate(-7deg);
+    }
+    .pow-burst {
+      position: absolute;
+      inset: -0.45em -0.55em;
+      background: var(--gold);
+      clip-path: polygon(
+        50% 0%, 61% 22%, 85% 12%, 78% 35%, 100% 50%, 78% 62%,
+        88% 85%, 62% 78%, 50% 100%, 38% 78%, 15% 88%, 24% 62%,
+        0% 50%, 24% 36%, 12% 14%, 38% 24%
+      );
+      z-index: 0;
+      border: none;
+      filter: drop-shadow(2px 2px 0 var(--ink));
+    }
+    .pow {
+      position: relative;
+      z-index: 1;
+      display: inline-block;
+      font-family: var(--font-display);
+      font-size: 1.35em;
+      line-height: 1;
+      padding: 0.08em 0.18em;
+      color: var(--red);
+      text-shadow:
+        -2px -2px 0 var(--ink),
+         2px -2px 0 var(--ink),
+        -2px  2px 0 var(--ink),
+         2px  2px 0 var(--ink),
+         3px  3px 0 rgba(0,0,0,0.15);
+      letter-spacing: 0.04em;
+    }
+
+    .path-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin: 0 0 1.25rem;
+    }
+    .path-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.45rem 0.75rem;
+      background: var(--panel);
+      border: 3px solid var(--ink);
+      border-radius: 999px;
+      font-weight: 800;
+      font-size: 0.88rem;
+      box-shadow: 3px 3px 0 var(--ink);
+    }
+    .path-chip.ai { background: #e8f0ff; }
+    .path-chip.byok { background: #fff4cc; }
+    .stamp {
+      display: inline-block;
+      font-family: var(--font-display);
+      font-size: 0.95rem;
+      letter-spacing: 0.08em;
+      color: var(--red);
+      border: 2.5px dashed var(--red);
+      border-radius: 6px;
+      padding: 0.05em 0.35em;
+      transform: rotate(-4deg);
+      line-height: 1.1;
+    }
+    .trust-line {
+      margin: 0 0 1.35rem;
+      font-weight: 700;
+      color: var(--muted);
+      max-width: 34rem;
+    }
+    .trust-line strong { color: var(--ink); }
+
+    /* Phone mockup */
+    .phone {
+      width: min(280px, 72vw);
+      margin: 0 auto;
+      background: var(--ink);
+      border-radius: 36px;
+      padding: 12px;
+      border: 4px solid #222;
+      box-shadow:
+        8px 8px 0 rgba(11,11,15,0.25),
+        0 0 0 3px var(--gold);
+      position: relative;
+    }
+    .phone::before {
+      content: "";
+      position: absolute;
+      top: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 90px;
+      height: 18px;
+      background: #111;
+      border-radius: 999px;
+      z-index: 2;
+    }
+    .phone-screen {
+      border-radius: 26px;
+      overflow: hidden;
+      background: #ddd;
+      aspect-ratio: 9 / 19.5;
+      position: relative;
+    }
+    .phone-screen img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top center;
+    }
+    .phone-caption {
+      text-align: center;
+      margin-top: 0.85rem;
+      font-weight: 800;
+      font-size: 0.9rem;
+    }
+    .android-note {
+      display: none;
+      text-align: center;
+      margin-top: 0.4rem;
+      font-size: 0.8rem;
+      color: var(--muted);
+      font-weight: 700;
+    }
+    html[data-platform="android"] .android-note { display: block; }
+
+    /* —— Panels / cards —— */
+    .panel {
+      background: var(--panel);
+      border: 3px solid var(--ink);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+    .powers-grid {
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: 1fr;
+    }
+    @media (min-width: 640px) {
+      .powers-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (min-width: 960px) {
+      .powers-grid { grid-template-columns: 1fr 1fr 1fr; }
+    }
+    .power-card {
+      padding: 1.25rem 1.2rem 1.35rem;
+      transition: transform 0.15s;
+    }
+    .power-card:hover { transform: translateY(-3px); }
+    .power-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      border: 3px solid var(--ink);
+      display: grid;
+      place-items: center;
+      font-family: var(--font-display);
+      font-size: 1.35rem;
+      margin-bottom: 0.75rem;
+      background: var(--gold);
+    }
+    .power-card:nth-child(2) .power-icon { background: #ffb4a8; }
+    .power-card:nth-child(3) .power-icon { background: #b8d4ff; }
+    .power-card:nth-child(4) .power-icon { background: #c8f5d4; }
+    .power-card:nth-child(5) .power-icon { background: #ffe08a; }
+    .power-card:nth-child(6) .power-icon { background: #e0d4ff; }
+    .power-card h3 {
+      font-family: var(--font-display);
+      font-size: 1.45rem;
+      letter-spacing: 0.03em;
+      margin: 0 0 0.4rem;
+    }
+    .power-card p {
+      margin: 0;
+      color: var(--muted);
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    /* How it works */
+    .steps {
+      display: grid;
+      gap: 1rem;
+    }
+    @media (min-width: 800px) {
+      .steps { grid-template-columns: repeat(3, 1fr); }
+    }
+    .step {
+      padding: 1.35rem 1.2rem;
+      position: relative;
+    }
+    .step-num {
+      font-family: var(--font-display);
+      font-size: 2.4rem;
+      color: var(--red);
+      line-height: 1;
+      margin-bottom: 0.4rem;
+      text-shadow: 2px 2px 0 var(--gold);
+    }
+    .step h3 {
+      font-family: var(--font-display);
+      font-size: 1.4rem;
+      margin: 0 0 0.4rem;
+      letter-spacing: 0.03em;
+    }
+    .step p {
+      margin: 0;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    /* Gallery */
+    .gallery-grid {
+      display: grid;
+      gap: 1.25rem;
+      grid-template-columns: 1fr;
+    }
+    @media (min-width: 720px) {
+      .gallery-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    .gallery-item {
+      text-align: center;
+    }
+    .gallery-item .phone {
+      width: min(220px, 70vw);
+    }
+    .gallery-item h3 {
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+      margin: 0.85rem 0 0.2rem;
+      letter-spacing: 0.03em;
+    }
+    .gallery-item p {
+      margin: 0;
+      color: var(--muted);
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    /* Privacy */
+    .privacy-band {
+      background: var(--ink);
+      color: #f5f5f5;
+      border-top: 4px solid var(--gold);
+      border-bottom: 4px solid var(--gold);
+      padding: 3rem 0;
+    }
+    .privacy-band .section-kicker { color: var(--gold); }
+    .privacy-band .section-title { color: #fff; }
+    .privacy-band .section-lead { color: #c9c9d1; }
+    .privacy-band a { color: var(--gold); font-weight: 800; }
+    .privacy-band a:hover { color: #fff; }
+
+    /* CTA */
+    .cta-band {
+      padding: 3.5rem 0;
+    }
+    .cta-panel {
+      padding: 2rem 1.5rem;
+      text-align: center;
+      background:
+        repeating-linear-gradient(
+          -45deg,
+          var(--gold) 0,
+          var(--gold) 12px,
+          var(--gold-deep) 12px,
+          var(--gold-deep) 24px
+        );
+      border: 4px solid var(--ink);
+      border-radius: calc(var(--radius) + 4px);
+      box-shadow: 8px 8px 0 var(--ink);
+    }
+    .cta-panel h2 {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 5vw, 3rem);
+      margin: 0 0 0.5rem;
+      letter-spacing: 0.03em;
+      text-shadow: 2px 2px 0 #fff;
+    }
+    .cta-panel p {
+      margin: 0 auto 1.25rem;
+      max-width: 32rem;
+      font-weight: 700;
+    }
+    .cta-panel .btn-row { justify-content: center; }
+
+    /* FAQ */
+    .faq-list {
+      display: grid;
+      gap: 0.75rem;
+      max-width: 760px;
+    }
+    details.faq {
+      background: var(--panel);
+      border: 3px solid var(--ink);
+      border-radius: 12px;
+      box-shadow: 4px 4px 0 var(--ink);
+      padding: 0.15rem 0;
+    }
+    details.faq summary {
+      cursor: pointer;
+      font-weight: 800;
+      padding: 0.9rem 1.1rem;
+      list-style: none;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+    details.faq summary::-webkit-details-marker { display: none; }
+    details.faq summary::after {
+      content: "+";
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      color: var(--red);
+      flex-shrink: 0;
+    }
+    details.faq[open] summary::after { content: "−"; }
+    details.faq summary:focus-visible {
+      outline: 3px solid var(--blue-bright);
+      outline-offset: 2px;
+    }
+    details.faq .faq-body {
+      padding: 0 1.1rem 1rem;
+      color: var(--muted);
+      font-weight: 600;
+    }
+    details.faq .faq-body p { margin: 0; }
+
+    /* Footer */
+    footer {
+      background: var(--ink);
+      color: #c9c9d1;
+      padding: 2.5rem 0 2rem;
+      border-top: 4px solid var(--gold);
+    }
+    .footer-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+    .footer-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      color: #fff;
+      text-decoration: none;
+      font-family: var(--font-display);
+      font-size: 1.4rem;
+      letter-spacing: 0.04em;
+    }
+    .footer-brand img {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      border: 2px solid var(--gold);
+      background: #fff;
+    }
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem 1.25rem;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    .footer-links a {
+      color: #eee;
+      text-decoration: none;
+      font-weight: 700;
+    }
+    .footer-links a:hover { color: var(--gold); }
+    .footer-copy {
+      margin-top: 1.75rem;
+      font-size: 0.85rem;
+      opacity: 0.75;
+    }
+
+    /* Reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .btn, .power-card, .slider, .slider::before, .toggle-ios, .toggle-android {
+        transition: none !important;
+      }
+      .pow-wrap { transform: none; }
+    }
+  </style>
+</head>
+<body>
+  <a class="wrap" href="#main" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;">Skip to content</a>
+
+  <header class="nav">
+    <div class="wrap nav-inner">
+      <a class="brand" href="#top" id="top">
+        <img src="assets/icon.png" width="40" height="40" alt="" />
+        <span>Comic Coin</span>
+      </a>
+      <nav aria-label="Primary">
+        <ul class="nav-links">
+          <li><a href="#powers">Powers</a></li>
+          <li><a href="#how">How it works</a></li>
+          <li><a href="#gallery">Gallery</a></li>
+          <li><a href="#faq">FAQ</a></li>
+        </ul>
+      </nav>
+      <div class="nav-actions">
+        <div class="platform-toggle" title="Switch app screenshots between iOS and Android">
+          <span class="toggle-ios" id="label-ios">iOS</span>
+          <label class="switch">
+            <span class="visually-hidden" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0;">Show Android screenshots</span>
+            <input type="checkbox" id="platform-switch" role="switch" aria-checked="false" aria-label="Toggle Android screenshots" />
+            <span class="slider" aria-hidden="true"></span>
+          </label>
+          <span class="toggle-android" id="label-android">Android</span>
+        </div>
+        <a class="nav-cta" href="#download">Get the app</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- Hero -->
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-bg" aria-hidden="true"></div>
+      <div class="wrap">
+        <div>
+          <h1 id="hero-title" class="display">Show me the money.</h1>
+          <p class="hero-sub">Comic prices. Comic style.</p>
+          <p class="hero-body">
+            Track comic book prices with style using the
+            <span class="pow-wrap">
+              <span class="pow-burst" aria-hidden="true"></span>
+              <span class="pow">power</span>
+            </span>
+            of AI or the PriceCharting API — expandable results, local history, and Golden Age hero art.
+          </p>
+
+          <div class="path-row" aria-label="How to get prices">
+            <span class="path-chip ai">AI — jump right in</span>
+            <span class="path-chip byok">
+              PriceCharting
+              <span class="stamp" title="Bring Your Own Key">BYOK</span>
+            </span>
+          </div>
+
+          <p class="trust-line">
+            <strong>No subscription required to start.</strong>
+            Live market data when you plug in <em>your</em> PriceCharting key — it stays on your device.
+          </p>
+
+          <div class="btn-row" id="download">
+            <!-- TODO: replace href with real App Store URL -->
+            <a class="btn is-soon" href="#" aria-disabled="true" data-store="apple" title="App Store link coming soon">
+               App Store
+              <small style="font-weight:700;opacity:0.75;">Coming soon</small>
+            </a>
+            <!-- TODO: replace href with real Google Play URL -->
+            <a class="btn btn-dark is-soon" href="#" aria-disabled="true" data-store="google" title="Google Play link coming soon">
+              Google Play
+              <small style="font-weight:700;opacity:0.75;">Coming soon</small>
+            </a>
+          </div>
+        </div>
+
+        <div>
+          <div class="phone">
+            <div class="phone-screen">
+              <img
+                id="hero-screen"
+                data-screen
+                data-ios-src="assets/screens/ios/search.png"
+                data-android-src="assets/screens/android/search.svg"
+                src="assets/screens/ios/search.png"
+                alt="Comic Coin search screen on iOS"
+                width="390"
+                height="844"
+              />
+            </div>
+          </div>
+          <p class="phone-caption"><span data-platform-label>iOS</span> preview</p>
+          <p class="android-note">Android screenshots coming soon — placeholder shown.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Powers -->
+    <section id="powers" aria-labelledby="powers-title">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="section-kicker">Powers</span>
+          <h2 id="powers-title" class="section-title">What you get</h2>
+          <p class="section-lead">Collector tools with comic-book swagger — built for dealers, hunters, and anyone who loves the longboxes.</p>
+        </div>
+        <div class="powers-grid">
+          <article class="panel power-card">
+            <div class="power-icon" aria-hidden="true">+</div>
+            <h3>Dynamic comic form</h3>
+            <p>Title, publisher, single issues or ranges, multi-grade, CGC or Raw — add comics the way you think about them.</p>
+          </article>
+          <article class="panel power-card">
+            <div class="power-icon" aria-hidden="true">$</div>
+            <h3>Show me the money</h3>
+            <p>One-tap lookup with a satisfying cash-register chime. Results drop in with personality.</p>
+          </article>
+          <article class="panel power-card">
+            <div class="power-icon" aria-hidden="true">≡</div>
+            <h3>Expandable results tree</h3>
+            <p>Price, grader, sold records, and velocity — expand each branch when you need the deep dive.</p>
+          </article>
+          <article class="panel power-card">
+            <div class="power-icon" aria-hidden="true">↺</div>
+            <h3>Search history</h3>
+            <p>Swipe to browse recent searches. Retry, reload into the form, or delete what you don’t need.</p>
+          </article>
+          <article class="panel power-card">
+            <div class="power-icon" aria-hidden="true">⚡</div>
+            <h3>AI or BYOK</h3>
+            <p>Jump in with AI estimates. Want live PriceCharting data? Bring your own key — never bundled, always optional.</p>
+          </article>
+          <article class="panel power-card">
+            <div class="power-icon" aria-hidden="true">🔒</div>
+            <h3>Private by design</h3>
+            <p>Your API key and search history stay on your device. We don’t scoop your list or sell your data.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- How it works -->
+    <section id="how" aria-labelledby="how-title" style="background: rgba(255,255,255,0.35);">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="section-kicker">Origin story</span>
+          <h2 id="how-title" class="section-title">How it works</h2>
+          <p class="section-lead">Three beats. No subscription gate. PriceCharting when <em>you</em> decide.</p>
+        </div>
+        <div class="steps">
+          <article class="panel step">
+            <div class="step-num">01</div>
+            <h3>Download &amp; open</h3>
+            <p>Start with AI estimates — no subscription needed to explore the app and run lookups.</p>
+          </article>
+          <article class="panel step">
+            <div class="step-num">02</div>
+            <h3>Add comics</h3>
+            <p>Titles, issues or ranges, grades (CGC or Raw). Stack a list the way you’d work a show floor.</p>
+          </article>
+          <article class="panel step">
+            <div class="step-num">03</div>
+            <h3>Show me the money</h3>
+            <p>Expandable results + history. Want live PriceCharting? <span class="stamp">BYOK</span> — paste <em>your</em> Pro token in settings (on-device only).</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Gallery -->
+    <section id="gallery" aria-labelledby="gallery-title">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="section-kicker">Evidence locker</span>
+          <h2 id="gallery-title" class="section-title">Inside the app</h2>
+          <p class="section-lead">
+            Flip the <strong>iOS / Android</strong> switch in the nav to preview both platforms.
+            <span class="android-note" style="display:inline;margin:0;"> (Android art is placeholder until final shots land.)</span>
+          </p>
+        </div>
+        <div class="gallery-grid">
+          <figure class="gallery-item">
+            <div class="phone">
+              <div class="phone-screen">
+                <img
+                  data-screen
+                  data-ios-src="assets/screens/ios/search.png"
+                  data-android-src="assets/screens/android/search.svg"
+                  src="assets/screens/ios/search.png"
+                  alt="Search and comic entry form"
+                  width="390"
+                  height="844"
+                />
+              </div>
+            </div>
+            <h3>Search</h3>
+            <p>Build your list with titles, issues, and grades.</p>
+          </figure>
+          <figure class="gallery-item">
+            <div class="phone">
+              <div class="phone-screen">
+                <img
+                  data-screen
+                  data-ios-src="assets/screens/ios/results.png"
+                  data-android-src="assets/screens/android/results.svg"
+                  src="assets/screens/ios/results.png"
+                  alt="Expandable results tree"
+                  width="390"
+                  height="844"
+                />
+              </div>
+            </div>
+            <h3>Results</h3>
+            <p>Prices, sold records, and velocity in a clean tree.</p>
+          </figure>
+          <figure class="gallery-item">
+            <div class="phone">
+              <div class="phone-screen">
+                <img
+                  data-screen
+                  data-ios-src="assets/screens/ios/history.png"
+                  data-android-src="assets/screens/android/history.svg"
+                  src="assets/screens/ios/history.png"
+                  alt="Search history list"
+                  width="390"
+                  height="844"
+                />
+              </div>
+            </div>
+            <h3>History</h3>
+            <p>Retry, reload, or clear past searches anytime.</p>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- Privacy -->
+    <div class="privacy-band" id="privacy">
+      <div class="wrap">
+        <span class="section-kicker">Secret identity</span>
+        <h2 class="section-title">On-device. Your keys. Your history.</h2>
+        <p class="section-lead">
+          Comic Coin doesn’t make you create an account. Search history lives on your phone.
+          If you use PriceCharting, your API token is stored with platform secure storage and never sent to us.
+        </p>
+        <a href="privacy.html">Read the privacy policy →</a>
+      </div>
+    </div>
+
+    <!-- CTA -->
+    <section class="cta-band" aria-labelledby="cta-title">
+      <div class="wrap">
+        <div class="cta-panel">
+          <h2 id="cta-title">Download Comic Coin</h2>
+          <p>No subscription required to start. AI to jump right in — PriceCharting when you bring your own key.</p>
+          <div class="btn-row">
+            <a class="btn btn-ghost is-soon" href="#" aria-disabled="true" data-store="apple"> App Store · Coming soon</a>
+            <a class="btn btn-dark is-soon" href="#" aria-disabled="true" data-store="google">Google Play · Coming soon</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq" aria-labelledby="faq-title">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="section-kicker">Letters page</span>
+          <h2 id="faq-title" class="section-title">FAQ</h2>
+          <p class="section-lead">Straight answers for collectors in a hurry.</p>
+        </div>
+        <div class="faq-list">
+          <details class="faq">
+            <summary>What is Comic Coin?</summary>
+            <div class="faq-body">
+              <p>A stylish iOS and Android app for looking up comic book prices — titles, issues, grades — with expandable results, local search history, and public-domain Golden Age hero art.</p>
+            </div>
+          </details>
+          <details class="faq">
+            <summary>Do I need a PriceCharting subscription?</summary>
+            <div class="faq-body">
+              <p><strong>No, not to try the app.</strong> Use AI estimates to jump in. Live PriceCharting data is <strong>BYOK</strong> — bring your own Pro API token when you want sold records, velocity, and market prices from your account.</p>
+            </div>
+          </details>
+          <details class="faq">
+            <summary>What does BYOK mean?</summary>
+            <div class="faq-body">
+              <p><strong>Bring Your Own Key.</strong> Comic Coin never ships a PriceCharting key. You paste yours in settings; we store it only on your device. You bring the key, we bring the boom.</p>
+            </div>
+          </details>
+          <details class="faq">
+            <summary>What’s the difference between AI and PriceCharting?</summary>
+            <div class="faq-body">
+              <p>AI estimates get you moving right away. PriceCharting is the live market source — powered by <em>your</em> key and <em>your</em> subscription when you’re ready for that path.</p>
+            </div>
+          </details>
+          <details class="faq">
+            <summary>Is my API key safe?</summary>
+            <div class="faq-body">
+              <p>Yes. Keys use platform secure storage (Keychain on iOS, encrypted storage on Android). We never transmit your PriceCharting token to Comic Coin servers.</p>
+            </div>
+          </details>
+          <details class="faq">
+            <summary>Does my search history leave my phone?</summary>
+            <div class="faq-body">
+              <p>No. Recent searches stay local. You can retry, reload into the form, or delete entries anytime.</p>
+            </div>
+          </details>
+          <details class="faq">
+            <summary>Is Comic Coin on iOS and Android?</summary>
+            <div class="faq-body">
+              <p>Yes — one Flutter app for both platforms. Use the iOS / Android switch on this page to preview screenshots for each.</p>
+            </div>
+          </details>
+          <details class="faq">
+            <summary>How do I get support?</summary>
+            <div class="faq-body">
+              <p>Open an issue on <a href="https://github.com/dshmif/comics-flutter/issues" rel="noopener noreferrer">github.com/dshmif/comics-flutter</a>.</p>
+            </div>
+          </details>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <div class="footer-grid">
+        <a class="footer-brand" href="#top">
+          <img src="assets/icon.png" width="36" height="36" alt="" />
+          Comic Coin
+        </a>
+        <ul class="footer-links">
+          <li><a href="#powers">Powers</a></li>
+          <li><a href="#how">How it works</a></li>
+          <li><a href="#faq">FAQ</a></li>
+          <li><a href="privacy.html">Privacy</a></li>
+          <li><a href="https://github.com/dshmif/comics-flutter/issues" rel="noopener noreferrer">Support</a></li>
+          <li><a href="#" data-store="apple" aria-disabled="true">App Store</a></li>
+          <li><a href="#" data-store="google" aria-disabled="true">Google Play</a></li>
+        </ul>
+      </div>
+      <p class="footer-copy">© <span id="year">2026</span> Comic Coin. Comic prices. Comic style. Not affiliated with PriceCharting.</p>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      var STORAGE_KEY = "comic-coin-platform";
+      var root = document.documentElement;
+      var toggle = document.getElementById("platform-switch");
+      var yearEl = document.getElementById("year");
+      if (yearEl) yearEl.textContent = String(new Date().getFullYear());
+
+      function platform() {
+        return root.getAttribute("data-platform") === "android" ? "android" : "ios";
+      }
+
+      function applyPlatform(p) {
+        var next = p === "android" ? "android" : "ios";
+        root.setAttribute("data-platform", next);
+        if (toggle) {
+          toggle.checked = next === "android";
+          toggle.setAttribute("aria-checked", next === "android" ? "true" : "false");
+        }
+        document.querySelectorAll("[data-screen]").forEach(function (img) {
+          var src = next === "android" ? img.getAttribute("data-android-src") : img.getAttribute("data-ios-src");
+          if (src) img.setAttribute("src", src);
+          var base = img.getAttribute("alt") || "";
+          // Keep alt informative without getting too noisy
+          if (img.id === "hero-screen") {
+            img.setAttribute("alt", "Comic Coin search screen on " + (next === "android" ? "Android" : "iOS"));
+          }
+        });
+        document.querySelectorAll("[data-platform-label]").forEach(function (el) {
+          el.textContent = next === "android" ? "Android" : "iOS";
+        });
+        try {
+          localStorage.setItem(STORAGE_KEY, next);
+        } catch (e) { /* ignore */ }
+      }
+
+      // Restore preference
+      var saved = null;
+      try {
+        saved = localStorage.getItem(STORAGE_KEY);
+      } catch (e) { /* ignore */ }
+      applyPlatform(saved === "android" ? "android" : "ios");
+
+      if (toggle) {
+        toggle.addEventListener("change", function () {
+          applyPlatform(toggle.checked ? "android" : "ios");
+        });
+      }
+
+      // Soft-block "coming soon" store links
+      document.querySelectorAll('a[aria-disabled="true"]').forEach(function (a) {
+        a.addEventListener("click", function (e) {
+          e.preventDefault();
+        });
+      });
+    })();
+  </script>
+</body>
+</html>
