@@ -220,27 +220,29 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      width: 42px;
-      height: 42px;
+      width: 44px;
+      height: 44px;
       padding: 0;
-      border: 2px solid var(--gold);
-      border-radius: 12px;
-      background: #1c1c24;
-      color: var(--gold);
+      border: none;
+      border-radius: 10px;
+      background: transparent;
+      color: inherit;
       cursor: pointer;
-      transition: transform 0.12s, background 0.15s, color 0.15s;
+      transition: transform 0.12s, opacity 0.15s;
     }
-    .boom-btn:hover,
+    .boom-btn:hover {
+      transform: scale(1.08);
+      opacity: 0.92;
+    }
     .boom-btn[aria-expanded="true"] {
-      background: var(--gold);
-      color: var(--ink);
+      transform: scale(1.05);
     }
     .boom-btn:focus-visible {
       outline: 2px solid var(--gold);
       outline-offset: 2px;
     }
     .boom-btn .boom-emoji {
-      font-size: 1.25rem;
+      font-size: 1.85rem;
       line-height: 1;
       display: block;
     }
