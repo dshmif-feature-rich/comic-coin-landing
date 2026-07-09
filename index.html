@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-platform="ios" data-theme="light">
+<html lang="en" data-platform="ios" data-theme="dark">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -929,7 +929,7 @@
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" focusable="false"><circle cx="12" cy="12" r="4" fill="currentColor" stroke="none"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
             </span>
             <label class="switch">
-              <input type="checkbox" id="theme-switch" role="switch" aria-checked="false" aria-label="Show dark mode app screenshots" />
+              <input type="checkbox" id="theme-switch" role="switch" aria-checked="true" checked aria-label="Show dark mode app screenshots" />
               <span class="slider theme-slider" aria-hidden="true"></span>
             </label>
             <span class="toggle-side toggle-dark" aria-hidden="true" title="Dark">
@@ -961,7 +961,7 @@
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" focusable="false"><circle cx="12" cy="12" r="4" fill="currentColor" stroke="none"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
               </span>
               <label class="switch">
-                <input type="checkbox" id="theme-switch-mobile" role="switch" aria-checked="false" aria-label="Show dark mode app screenshots" />
+                <input type="checkbox" id="theme-switch-mobile" role="switch" aria-checked="true" checked aria-label="Show dark mode app screenshots" />
                 <span class="slider theme-slider" aria-hidden="true"></span>
               </label>
               <span class="toggle-side toggle-dark" aria-hidden="true" title="Dark">
@@ -1030,14 +1030,14 @@
                 data-ios-dark="assets/screens/ios/dark/search.png"
                 data-android-light="assets/screens/android/light/search.svg"
                 data-android-dark="assets/screens/android/dark/search.svg"
-                src="assets/screens/ios/light/search.png"
-                alt="Comic Coin search screen on iOS (light mode)"
+                src="assets/screens/ios/dark/search.png"
+                alt="Comic Coin search screen on iOS (dark mode)"
                 width="390"
                 height="844"
               />
             </div>
           </div>
-          <p class="phone-caption"><span data-platform-label>iOS</span> · <span data-theme-label>Light</span> preview</p>
+          <p class="phone-caption"><span data-platform-label>iOS</span> · <span data-theme-label>Dark</span> preview</p>
           <p class="android-note">Android screenshots coming soon — placeholder shown.</p>
         </div>
       </div>
@@ -1151,7 +1151,7 @@
                   data-ios-dark="assets/screens/ios/dark/search.png"
                   data-android-light="assets/screens/android/light/search.svg"
                   data-android-dark="assets/screens/android/dark/search.svg"
-                  src="assets/screens/ios/light/search.png"
+                  src="assets/screens/ios/dark/search.png"
                   alt="Search and comic entry form"
                   width="390"
                   height="844"
@@ -1170,7 +1170,7 @@
                   data-ios-dark="assets/screens/ios/dark/results.png"
                   data-android-light="assets/screens/android/light/results.svg"
                   data-android-dark="assets/screens/android/dark/results.svg"
-                  src="assets/screens/ios/light/results.png"
+                  src="assets/screens/ios/dark/results.png"
                   alt="Expandable results tree"
                   width="390"
                   height="844"
@@ -1189,7 +1189,7 @@
                   data-ios-dark="assets/screens/ios/dark/history.png"
                   data-android-light="assets/screens/android/light/history.svg"
                   data-android-dark="assets/screens/android/dark/history.svg"
-                  src="assets/screens/ios/light/history.png"
+                  src="assets/screens/ios/dark/history.png"
                   alt="Search history list"
                   width="390"
                   height="844"
@@ -1444,7 +1444,8 @@
       } catch (e) { /* ignore */ }
 
       applyPlatform(savedPlatform === "android" ? "android" : "ios");
-      applyTheme(savedTheme === "dark" ? "dark" : "light");
+      // Default: iOS + dark (only honor an explicit light preference from storage)
+      applyTheme(savedTheme === "light" ? "light" : "dark");
 
       platformToggles.forEach(function (toggle) {
         toggle.addEventListener("change", function () {
