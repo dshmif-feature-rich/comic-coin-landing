@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Privacy Policy — Comic Coin</title>
-  <meta name="description" content="Comic Coin privacy policy. Local-first history and BYOK key; optional AI estimates use a privacy-friendly anonymous backend." />
+  <meta name="description" content="Comic Coin privacy policy. Local-first history and BYOK key; optional on-device Scan to fill; optional AI estimates use a privacy-friendly anonymous backend." />
   <meta name="theme-color" content="#0b0b0f" />
   <link rel="icon" href="assets/comic-coin-icon.png" type="image/png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -129,6 +129,7 @@
           <li><strong>No Comic Coin account</strong> — you do not register with us.</li>
           <li><strong>PriceCharting key (optional)</strong> — stored only on your device; never sent to Comic Coin servers.</li>
           <li><strong>AI estimates (optional)</strong> — short-lived token and privacy-oriented device signals for free-tier quota; we do not sell personal data.</li>
+          <li><strong>Scan to fill (optional)</strong> — on-device OCR from a cover photo; images are not uploaded for recognition.</li>
           <li><strong>Search history</strong> — on your device; delete anytime.</li>
           <li><strong>No advertising SDKs / no third-party analytics</strong> in the App.</li>
         </ul>
@@ -159,6 +160,11 @@
               <td>Faster re-lookups</td>
               <td><strong>No</strong></td>
             </tr>
+            <tr>
+              <td>Scan-to-fill photos (temporary)</td>
+              <td>On-device OCR to prefill title/issue</td>
+              <td><strong>No</strong> (not uploaded for OCR; not saved to search history). Camera/gallery picks may create a short-lived cache file that the App deletes after recognition.</td>
+            </tr>
           </tbody>
         </table>
 
@@ -172,12 +178,16 @@
         </ul>
         <p>AI inference is performed via <strong>xAI</strong> (or a successor) under our backend account. Do not enter secrets or personal data into search fields. Free-tier usage is limited.</p>
 
+        <h2>Scan to fill (optional)</h2>
+        <p>If you use <strong>Scan to fill</strong>, the App reads text from a photo you take or choose (comic cover or similar) using <strong>on-device</strong> text recognition (Google ML Kit on iOS/Android). That image is used only to suggest form fields (e.g. title, issue, publisher). You can edit those fields before any search. Photos from this flow are <strong>not</strong> uploaded for OCR, <strong>not</strong> attached to search history, and <strong>not</strong> retained as app data after recognition when cleanup succeeds.</p>
+
         <h2>When you use PriceCharting</h2>
         <p>Lookups go <strong>directly from your device to PriceCharting</strong> using your token. Their practices are governed by their own policies. Comic Coin does not proxy or store that traffic.</p>
 
         <h2>How we use information</h2>
         <ul>
           <li>Provide comic price lookups (AI and/or PriceCharting)</li>
+          <li>Prefill search fields from optional on-device cover scans</li>
           <li>Enforce free-tier AI quota and protect the service from abuse</li>
           <li>Operational reliability (errors, latency logs)</li>
         </ul>
@@ -188,12 +198,14 @@
           <li><strong>PriceCharting</strong> — optional market data (BYOK)</li>
           <li><strong>xAI</strong> (via our backend) — optional AI estimates</li>
           <li><strong>Amazon Web Services</strong> — hosts the AI backend</li>
+          <li><strong>Google ML Kit</strong> — optional on-device text recognition for Scan to fill (no Comic Coin upload of the photo)</li>
         </ul>
 
         <h2>Retention</h2>
         <ul>
           <li>On device: until you delete history, clear app data, or uninstall</li>
           <li>AI cache: about 7 days on device</li>
+          <li>Scan-to-fill temp images: deleted after recognition when cleanup succeeds</li>
           <li>Backend quota records: limited rolling window (~35 days), then expire</li>
         </ul>
 
@@ -206,6 +218,7 @@
         <h2>Your choices</h2>
         <ul>
           <li>Use AI only, PriceCharting only, or both as offered</li>
+          <li>Skip Scan to fill and type fields manually</li>
           <li>Delete search history in the App</li>
           <li>Clear app storage / uninstall to remove local data</li>
         </ul>
