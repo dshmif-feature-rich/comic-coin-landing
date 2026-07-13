@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Privacy Policy — Comic Coin</title>
-  <meta name="description" content="Comic Coin privacy policy. Local-first: your API key and search history stay on your device." />
+  <meta name="description" content="Comic Coin privacy policy. Local-first history and BYOK key; optional AI estimates use a privacy-friendly anonymous backend." />
   <meta name="theme-color" content="#0b0b0f" />
   <link rel="icon" href="assets/comic-coin-icon.png" type="image/png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -76,12 +76,25 @@
       letter-spacing: 0.03em;
       margin: 1.75rem 0 0.5rem;
     }
-    h2:first-child { margin-top: 0; }
+    h2:first-of-type { margin-top: 0; }
     p, li { font-weight: 600; color: var(--muted); }
     p { margin: 0 0 0.85rem; }
     ul { margin: 0 0 0.85rem; padding-left: 1.25rem; }
     li { margin-bottom: 0.35rem; }
     strong { color: var(--ink); }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 0 0 1rem;
+      font-size: 0.92rem;
+    }
+    th, td {
+      border: 2px solid var(--ink);
+      padding: 0.45rem 0.55rem;
+      text-align: left;
+      vertical-align: top;
+    }
+    th { background: #fff3b0; color: var(--ink); font-weight: 800; }
     .back { display: inline-block; margin-bottom: 1.25rem; font-weight: 800; }
     footer {
       background: var(--ink);
@@ -106,55 +119,107 @@
     <div class="wrap">
       <a class="back" href="index.html">← Back to Comic Coin</a>
       <h1>Privacy Policy</h1>
-      <p class="meta">Effective Date: July 1, 2026</p>
+      <p class="meta">Effective Date: July 13, 2026</p>
 
       <div class="panel">
-        <p>Comic Coin ("we", "us", or "our") is committed to protecting your privacy. This Privacy Policy explains how we handle information when you use our mobile application (the "App").</p>
+        <p>Comic Coin (“we”, “us”, or “our”) is committed to protecting your privacy. This Privacy Policy explains how information is handled when you use the Comic Coin mobile application (the “App”).</p>
 
-        <h2>Information We Collect</h2>
-        <p>Comic Coin is designed to be privacy-friendly:</p>
+        <h2>Summary</h2>
         <ul>
-          <li><strong>No personal accounts or login</strong> — You do not create an account with us.</li>
-          <li><strong>API Key</strong>: You may optionally provide a PriceCharting API token. This key is stored <strong>locally on your device</strong> using secure storage (FlutterSecureStorage) and is <strong>never transmitted to our servers</strong>.</li>
-          <li><strong>Search History</strong>: Your recent comic searches are stored locally on your device only. You can view, retry, load, or delete them at any time.</li>
-          <li><strong>No analytics or tracking</strong>: We do not collect usage data, device identifiers, or any analytics.</li>
-          <li><strong>No data shared with third parties</strong>: We do not sell, rent, or share any information.</li>
+          <li><strong>No Comic Coin account</strong> — you do not register with us.</li>
+          <li><strong>PriceCharting key (optional)</strong> — stored only on your device; never sent to Comic Coin servers.</li>
+          <li><strong>AI estimates (optional)</strong> — short-lived token and privacy-oriented device signals for free-tier quota; we do not sell personal data.</li>
+          <li><strong>Search history</strong> — on your device; delete anytime.</li>
+          <li><strong>No advertising SDKs / no third-party analytics</strong> in the App.</li>
         </ul>
 
-        <h2>How the App Works</h2>
+        <h2>On your device only</h2>
+        <table>
+          <thead>
+            <tr><th>Data</th><th>Purpose</th><th>Leaves device?</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>PriceCharting API token (if entered)</td>
+              <td>Your PriceCharting API calls</td>
+              <td><strong>No</strong> to Comic Coin. Sent only to PriceCharting when you run that provider.</td>
+            </tr>
+            <tr>
+              <td>Recent search list</td>
+              <td>History, retry, reload</td>
+              <td><strong>No</strong></td>
+            </tr>
+            <tr>
+              <td>Theme / sound preferences</td>
+              <td>Settings</td>
+              <td><strong>No</strong></td>
+            </tr>
+            <tr>
+              <td>Cached AI write-ups (~7 days)</td>
+              <td>Faster re-lookups</td>
+              <td><strong>No</strong></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h2>When you use AI estimates</h2>
+        <p>The App contacts Comic Coin’s cloud backend (AWS). That path may process:</p>
         <ul>
-          <li>Price lookups via PriceCharting are performed directly between your device and PriceCharting's servers using the token you provide (bring your own key).</li>
-          <li>Market data (sold records, velocity) is scraped from PriceCharting's public product pages when available.</li>
-          <li>Optional AI estimates use a privacy-friendly backend with short-lived credentials and device quotas; see the app configuration for details.</li>
-          <li>Search history and your API key remain on your device.</li>
+          <li>App-generated install / device identifiers (not your name or email) for anonymous quota</li>
+          <li>Coarse device signals (e.g. OS, app version) for privacy-preserving quota identity</li>
+          <li>Comic title, issue, grade/grader you submit — to produce the estimate</li>
+          <li>Short-lived JWT and remaining free searches</li>
+        </ul>
+        <p>AI inference is performed via <strong>xAI</strong> (or a successor) under our backend account. Do not enter secrets or personal data into search fields. Free-tier usage is limited.</p>
+
+        <h2>When you use PriceCharting</h2>
+        <p>Lookups go <strong>directly from your device to PriceCharting</strong> using your token. Their practices are governed by their own policies. Comic Coin does not proxy or store that traffic.</p>
+
+        <h2>How we use information</h2>
+        <ul>
+          <li>Provide comic price lookups (AI and/or PriceCharting)</li>
+          <li>Enforce free-tier AI quota and protect the service from abuse</li>
+          <li>Operational reliability (errors, latency logs)</li>
+        </ul>
+        <p>We do <strong>not</strong> sell personal information or use App data for third-party advertising.</p>
+
+        <h2>Third-party services</h2>
+        <ul>
+          <li><strong>PriceCharting</strong> — optional market data (BYOK)</li>
+          <li><strong>xAI</strong> (via our backend) — optional AI estimates</li>
+          <li><strong>Amazon Web Services</strong> — hosts the AI backend</li>
         </ul>
 
-        <h2>Third-Party Services</h2>
-        <p>The App may use:</p>
+        <h2>Retention</h2>
         <ul>
-          <li><strong>PriceCharting API</strong> (<a href="https://www.pricecharting.com" rel="noopener noreferrer">pricecharting.com</a>) — You must provide your own API token. Their privacy practices are governed by their own policies.</li>
+          <li>On device: until you delete history, clear app data, or uninstall</li>
+          <li>AI cache: about 7 days on device</li>
+          <li>Backend quota records: limited rolling window (~35 days), then expire</li>
         </ul>
 
-        <h2>Data Security</h2>
-        <p>Your API key and history are stored using the platform's secure storage mechanisms (Keychain on iOS, encrypted SharedPreferences on Android). We do not have access to this data.</p>
+        <h2>Security</h2>
+        <p>Keys and tokens use platform secure storage where applicable. Network calls use HTTPS. No measure is perfect.</p>
 
-        <h2>Children's Privacy</h2>
-        <p>The App is not directed to children under 13. We do not knowingly collect information from children.</p>
+        <h2>Children’s privacy</h2>
+        <p>The App is not directed to children under 13. We do not knowingly collect personal information from children under 13.</p>
 
-        <h2>Changes to This Policy</h2>
-        <p>We may update this Privacy Policy from time to time. We will notify you of any changes by updating the "Effective Date" at the top of this policy and in the App if appropriate.</p>
+        <h2>Your choices</h2>
+        <ul>
+          <li>Use AI only, PriceCharting only, or both as offered</li>
+          <li>Delete search history in the App</li>
+          <li>Clear app storage / uninstall to remove local data</li>
+        </ul>
 
-        <h2>Contact Us</h2>
+        <h2>Changes</h2>
+        <p>We may update this Policy by changing the Effective Date and posting the new version at this URL.</p>
+
+        <h2>Contact</h2>
         <p>
-          If you have any questions about this Privacy Policy, please contact us via
-          <strong>dshmif-feature-rich</strong> on GitHub:
-          <a href="https://github.com/dshmif-feature-rich" rel="noopener noreferrer">github.com/dshmif</a>
+          <a href="https://www.comiccoin.app">www.comiccoin.app</a> ·
+          <a href="https://github.com/dshmif-feature-rich">GitHub</a> ·
+          <a href="https://github.com/dshmif-feature-rich/comic-coin-community/issues">Support issues</a>
         </p>
-        <p>
-          Or open an issue
-          <a href="https://github.com/dshmif-feature-rich/comic-coin-community/issues" rel="noopener noreferrer">here</a>.
-        </p>
-        <p><em>This is a minimal privacy policy suitable for a local-first utility app. No personal data from search history or your PriceCharting key is sold or shared by Comic Coin.</em></p>
+        <p><em>Comic Coin is not affiliated with PriceCharting, CGC, or any grading company.</em></p>
       </div>
     </div>
   </main>
